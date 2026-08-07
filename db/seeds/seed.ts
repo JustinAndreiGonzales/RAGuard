@@ -1,6 +1,6 @@
-import { db } from ".";
+import { db } from "..";
 import bcrypt from "bcrypt";
-import { teamMembers, teams, users } from "./schema";
+import { teamMembers, teams, users } from "../schema";
 
 async function seed() {
   const passwordHash = await bcrypt.hash("password123", 10);

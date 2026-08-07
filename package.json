@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed": "tsx db/seed.ts"
+    "db:seed": "tsx db/seeds/seed.ts",
+    "db:seed:docs": "tsx db/seeds/seed.v2.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@auth/drizzle-adapter": "^1.11.3",
     "@supabase/supabase-js": "^2.112.1",
     "bcrypt": "^6.0.0",
