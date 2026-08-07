@@ -55,24 +55,31 @@ export const teamMembers = pgTable(
   ],
 );
 
-export const documents = pgTable("documents", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  ownerId: uuid("owner_id")
-    .references(() => users.id, {
-      onDelete: "restrict",
-    })
-    .notNull(),
-  title: text("title").notNull(),
-  originalFileName: text("original_file_name").notNull(),
-  fileType: fileTypeEnum("file_type").notNull(),
-  storagePath: text("storage_path").notNull(),
-  fileSizeBytes: integer("file_size_bytes").notNull(),
-  status: statusEnum("status").default("pending").notNull(),
-  processingError: text("processing_error"),
-  embeddingModel: text("embedding_model"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+export const documents = pgTable(
+  "documents",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    ownerId: uuid("owner_id")
+      .references(() => users.id, {
+        onDelete: "restrict",
+      })
+      .notNull(),
+    title: text("title").notNull(),
+    originalFileName: text("original_file_name").notNull(),
+    fileType: fileTypeEnum("file_type").notNull(),
+    storagePath: text("storage_path").notNull(),
+    fileSizeBytes: integer("file_size_bytes").notNull(),
+    status: statusEnum("status").default("pending").notNull(),
+    processingError: text("processing_error"),
+    embeddingModel: text("embedding_model"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("document_owner_id_idx").on(table.ownerId),
+    index("document_status_idx").on(table.status),
+  ],
+);
 
 export const documentChunks = pgTable(
   "document_chunks",
@@ -112,7 +119,6 @@ export const documentPermissions = pgTable(
   },
   (table) => [
     unique().on(table.documentId, table.principalType, table.principalId),
-    index("document_permissions_document_id_idx").on(table.documentId),
   ],
 );
 

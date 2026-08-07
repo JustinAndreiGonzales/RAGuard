@@ -1,0 +1,80 @@
+import { auth } from "@/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db";
+import { documentChunks, documents } from "@/db/schema";
+import { FileType } from "@/types/fileType";
+import { inngest } from "@/lib/inngest/client";
+import { supabase } from "@/lib/supabase";
+
+export const maxDuration = 60;
+export const maxFileSize = 20; // MB
+export const mimeTypeToFileType = new Map<string, FileType>([
+  ["application/pdf", "pdf"],
+  ["text/plain", "txt"],
+  [
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "docx",
+  ],
+  ["text/markdown", "md"],
+]);
+
+export async function POST(request: NextRequest) {
+  const session = await auth();
+
+  if (!session?.user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Step 1: Validate Input
+  const formData = await request.formData();
+  const file = formData.get("file") as File | null;
+
+  if (!file)
+    return NextResponse.json({ error: "No file provided" }, { status: 400 });
+
+  const fileType = mimeTypeToFileType.get(file.type);
+  if (!fileType)
+    return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
+
+  const maxSize = maxFileSize * 1024 * 1024;
+  if (file.size > maxSize)
+    return NextResponse.json(
+      { error: `File too large (max ${maxFileSize}MB)` },
+      { status: 400 },
+    );
+
+  const bytes = await file.arrayBuffer();
+
+  // Step 2: Upload + create row
+  const documentId = crypto.randomUUID();
+  const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const storagePath = `${session.user.id}/${documentId}-${cleanFileName}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("documents")
+    .upload(storagePath, new Uint8Array(bytes), { contentType: file.type });
+
+  if (uploadError)
+    return NextResponse.json(
+      { error: "Failed to upload file" },
+      { status: 500 },
+    );
+
+  await db.insert(documents).values({
+    id: documentId,
+    ownerId: session.user.id,
+    title: file.name,
+    originalFileName: file.name,
+    fileType,
+    storagePath,
+    fileSizeBytes: file.size,
+    status: "pending",
+  });
+
+  // send to inngest
+  await inngest.send({
+    name: "document/uploaded",
+    data: { documentId, documentPath: storagePath, fileType },
+  });
+
+  return NextResponse.json({ documentId, status: "pending" });
+}
