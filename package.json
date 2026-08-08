@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx db/seeds/seed.ts",
-    "db:seed:docs": "tsx db/seeds/seed.v2.ts"
+    "db:seed:docs": "tsx db/seeds/seed.v2.ts",
+    "verify:sharing": "tsx tests/verify-team-sharing.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
