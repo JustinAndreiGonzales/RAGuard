@@ -1,1 +1,326 @@
 @import "tailwindcss";
+
+@theme {
+  /* Stone (neutral) */
+  --color-stone-50: #fbf9f6;
+  --color-stone-100: #f5efe7;
+  --color-stone-200: #e8dfd1;
+  --color-stone-300: #d6c6af;
+  --color-stone-400: #b9a488;
+  --color-stone-500: #96805f;
+  --color-stone-600: #78624a;
+  --color-stone-700: #5c4a38;
+  --color-stone-800: #40342a;
+  --color-stone-900: #2a2119;
+  --color-stone-950: #1c1611;
+
+  /* Clay (accent) */
+  --color-clay-50: #fdf1ea;
+  --color-clay-100: #fbe0d0;
+  --color-clay-200: #f5c2a3;
+  --color-clay-300: #ed9e71;
+  --color-clay-400: #e17f4c;
+  --color-clay-500: #c1602b;
+  --color-clay-600: #a14e22;
+  --color-clay-700: #7e3d1b;
+  --color-clay-800: #5e2e15;
+  --color-clay-900: #422010;
+
+  /* Sage (success/ready) */
+  --color-sage-50: #f1f5ec;
+  --color-sage-200: #d3e0c1;
+  --color-sage-300: #b7cba0;
+  --color-sage-500: #7c9a5e;
+  --color-sage-700: #52693c;
+  --color-sage-900: #253619;
+
+  /* Amber (processing) */
+  --color-amber-50: #fdf3e3;
+  --color-amber-200: #f0dba8;
+  --color-amber-300: #e8c57e;
+  --color-amber-500: #c6932a;
+  --color-amber-700: #966d1b;
+  --color-amber-900: #4a3512;
+
+  /* Rust (danger/failed) */
+  --color-rust-50: #fbedea;
+  --color-rust-200: #efc1b5;
+  --color-rust-300: #e29e8c;
+  --color-rust-500: #b23a2e;
+  --color-rust-700: #832a21;
+  --color-rust-900: #451d17;
+
+  /* Base */
+  --color-white: #ffffff;
+  /* Renamed from --color-black to avoid shadowing Tailwind's built-in
+     `black` utility (bg-black, text-black, etc. would otherwise silently
+     resolve to this warm tone everywhere, including in third-party
+     components). Use `bg-ink` / `text-ink` if you need this value directly. */
+  --color-ink: #1c1611;
+}
+
+@theme {
+  /* Font families */
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  /* Display */
+  --text-display: 2.25rem; /* 36px */
+  --text-display--line-height: 2.75rem; /* 44px */
+  --text-display--letter-spacing: -0.011em; /* -0.4px */
+
+  /* Heading/H1 */
+  --text-h1: 1.75rem; /* 28px */
+  --text-h1--line-height: 2.25rem; /* 36px */
+  --text-h1--letter-spacing: -0.007em; /* -0.2px */
+
+  /* Heading/H2 */
+  --text-h2: 1.375rem; /* 22px */
+  --text-h2--line-height: 1.875rem; /* 30px */
+  --text-h2--letter-spacing: -0.0045em; /* -0.1px */
+
+  /* Heading/H3 */
+  --text-h3: 1.125rem; /* 18px */
+  --text-h3--line-height: 1.625rem; /* 26px */
+  --text-h3--letter-spacing: 0em;
+
+  /* Body/Large */
+  --text-body-lg: 1rem; /* 16px */
+  --text-body-lg--line-height: 1.5rem; /* 24px */
+  --text-body-lg--letter-spacing: 0em;
+
+  /* Body/Default */
+  --text-body: 0.875rem; /* 14px */
+  --text-body--line-height: 1.375rem; /* 22px */
+  --text-body--letter-spacing: 0em;
+
+  /* Body/Small */
+  --text-body-sm: 0.8125rem; /* 13px */
+  --text-body-sm--line-height: 1.25rem; /* 20px */
+  --text-body-sm--letter-spacing: 0em;
+
+  /* Caption */
+  --text-caption: 0.75rem; /* 12px */
+  --text-caption--line-height: 1rem; /* 16px */
+  --text-caption--letter-spacing: 0.0083em; /* +0.1px */
+
+  /* Label */
+  --text-label: 0.8125rem; /* 13px */
+  --text-label--line-height: 1.125rem; /* 18px */
+  --text-label--letter-spacing: 0em;
+
+  /* Mono/Default */
+  --text-mono: 0.8125rem; /* 13px */
+  --text-mono--line-height: 1.25rem; /* 20px */
+  --text-mono--letter-spacing: 0em;
+
+  /* Mono/Label */
+  --text-mono-label: 0.6875rem; /* 11px */
+  --text-mono-label--line-height: 1rem; /* 16px */
+  --text-mono-label--letter-spacing: 0.0182em; /* +0.2px */
+}
+
+@layer components {
+  .type-display {
+    @apply font-sans font-semibold text-display;
+  }
+  .type-h1 {
+    @apply font-sans font-semibold text-h1;
+  }
+  .type-h2 {
+    @apply font-sans font-semibold text-h2;
+  }
+  .type-h3 {
+    @apply font-sans font-medium text-h3;
+  }
+  .type-body-lg {
+    @apply font-sans font-normal text-body-lg;
+  }
+  .type-body {
+    @apply font-sans font-normal text-body;
+  }
+  .type-body-sm {
+    @apply font-sans font-normal text-body-sm;
+  }
+  .type-caption {
+    @apply font-sans font-normal text-caption;
+  }
+  .type-label {
+    @apply font-sans font-medium text-label;
+  }
+  .type-mono {
+    @apply font-mono font-normal text-mono;
+  }
+  .type-mono-label {
+    @apply font-mono font-medium text-mono-label;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Semantic color tokens (light default, dark override via .dark)
+   Variable names here stay descriptive (bg-canvas, text-primary, etc.)
+   for readability. The @theme inline block below is what actually
+   controls the generated utility class names — see the note there.
+----------------------------------------------------------------------- */
+
+:root {
+  /* backgrounds */
+  --color-bg-canvas: var(--color-stone-50);
+  --color-bg-surface: var(--color-white);
+  --color-bg-surface-raised: var(--color-white);
+  --color-overlay-scrim: var(--color-stone-950);
+
+  /* borders */
+  --color-border-default: var(--color-stone-200);
+  --color-border-subtle: var(--color-stone-100);
+  --color-border-focus: var(--color-clay-500);
+
+  /* text */
+  --color-text-primary: var(--color-stone-900);
+  --color-text-secondary: var(--color-stone-600);
+  --color-text-tertiary: var(--color-stone-400);
+  --color-text-on-accent: var(--color-white);
+
+  /* accent */
+  --color-accent-default: var(--color-clay-500);
+  --color-accent-hover: var(--color-clay-600);
+  --color-accent-pressed: var(--color-clay-700);
+  --color-accent-subtle-bg: var(--color-clay-50);
+
+  /* danger */
+  --color-danger-default: var(--color-rust-500);
+  --color-danger-hover: var(--color-rust-700);
+
+  /* status: pending */
+  --color-status-pending-bg: var(--color-stone-100);
+  --color-status-pending-fg: var(--color-stone-600);
+  /* status: processing */
+  --color-status-processing-bg: var(--color-amber-50);
+  --color-status-processing-fg: var(--color-amber-700);
+  /* status: ready */
+  --color-status-ready-bg: var(--color-sage-50);
+  --color-status-ready-fg: var(--color-sage-700);
+  /* status: failed */
+  --color-status-failed-bg: var(--color-rust-50);
+  --color-status-failed-fg: var(--color-rust-500);
+}
+
+.dark {
+  --color-bg-canvas: var(--color-stone-950);
+  --color-bg-surface: var(--color-stone-900);
+  --color-bg-surface-raised: var(--color-stone-800);
+  --color-overlay-scrim: var(--color-stone-950);
+
+  --color-border-default: var(--color-stone-700);
+  --color-border-subtle: var(--color-stone-800);
+  --color-border-focus: var(--color-clay-400);
+
+  --color-text-primary: var(--color-stone-50);
+  --color-text-secondary: var(--color-stone-300);
+  --color-text-tertiary: var(--color-stone-500);
+  --color-text-on-accent: var(--color-white);
+
+  --color-accent-default: var(--color-clay-400);
+  --color-accent-hover: var(--color-clay-300);
+  --color-accent-pressed: var(--color-clay-500);
+  --color-accent-subtle-bg: var(--color-clay-900);
+
+  --color-danger-default: var(--color-rust-300);
+  --color-danger-hover: var(--color-rust-200);
+
+  --color-status-pending-bg: var(--color-stone-800);
+  --color-status-pending-fg: var(--color-stone-300);
+  --color-status-processing-bg: var(--color-amber-900);
+  --color-status-processing-fg: var(--color-amber-300);
+  --color-status-ready-bg: var(--color-sage-900);
+  --color-status-ready-fg: var(--color-sage-300);
+  --color-status-failed-bg: var(--color-rust-900);
+  --color-status-failed-fg: var(--color-rust-300);
+}
+
+/* -----------------------------------------------------------------------
+   FIX: In Tailwind v4, the key after --color- becomes the FULL utility
+   name (prefix included). --color-bg-canvas would generate bg-bg-canvas,
+   not bg-canvas, because "bg-canvas" is treated as the name and Tailwind
+   prepends "bg-" again. Same collision hits border-*, text-*, and the
+   overlay/scrim → bg-* mapping.
+
+   Fix: alias to short names here so the *generated* classes are
+   bg-canvas, bg-surface, border-line, border-focus, text-primary, etc.
+----------------------------------------------------------------------- */
+
+@theme inline {
+  --color-canvas: var(--color-bg-canvas);
+  --color-surface: var(--color-bg-surface);
+  --color-surface-raised: var(--color-bg-surface-raised);
+  --color-scrim: var(--color-overlay-scrim);
+
+  --color-line: var(--color-border-default);
+  --color-line-subtle: var(--color-border-subtle);
+  --color-focus: var(--color-border-focus);
+
+  --color-primary: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
+  --color-tertiary: var(--color-text-tertiary);
+  --color-on-accent: var(--color-text-on-accent);
+
+  --color-accent-default: var(--color-accent-default);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-pressed: var(--color-accent-pressed);
+  --color-accent-subtle-bg: var(--color-accent-subtle-bg);
+
+  --color-danger-default: var(--color-danger-default);
+  --color-danger-hover: var(--color-danger-hover);
+
+  --color-status-pending-bg: var(--color-status-pending-bg);
+  --color-status-pending-fg: var(--color-status-pending-fg);
+  --color-status-processing-bg: var(--color-status-processing-bg);
+  --color-status-processing-fg: var(--color-status-processing-fg);
+  --color-status-ready-bg: var(--color-status-ready-bg);
+  --color-status-ready-fg: var(--color-status-ready-fg);
+  --color-status-failed-bg: var(--color-status-failed-bg);
+  --color-status-failed-fg: var(--color-status-failed-fg);
+}
+
+@theme {
+  /* Reset so named tokens are the only spacing scale (prevents p-4
+     and p-md coexisting as two ways to express the same 16px). Remove
+     this line if you want Tailwind's default numeric scale available too. */
+  --spacing-*: initial;
+
+  --spacing-2xs: 0.25rem; /* 4px */
+  --spacing-xs: 0.5rem; /* 8px */
+  --spacing-sm: 0.75rem; /* 12px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 4rem; /* 64px */
+  --spacing-4xl: 6rem; /* 96px */
+}
+
+@theme {
+  --radius-*: initial; /* named tokens are the only radius scale */
+
+  --radius-none: 0px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+}
+
+@theme {
+  /* Bare `border` already gives 1px by default, so only `thick` needs
+     a named addition for the 2px stroke (focus rings, active tab). */
+  --border-width-thick: 2px;
+}
+
+@theme {
+  --shadow-sm:
+    0 1px 3px rgba(28, 22, 17, 0.06), 0 1px 2px rgba(28, 22, 17, 0.05);
+  --shadow-md:
+    0 4px 10px rgba(28, 22, 17, 0.08), 0 2px 6px rgba(28, 22, 17, 0.06);
+  --shadow-lg:
+    0 12px 24px rgba(28, 22, 17, 0.12), 0 4px 10px rgba(28, 22, 17, 0.08);
+}
