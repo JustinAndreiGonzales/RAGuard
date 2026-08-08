@@ -324,3 +324,44 @@
   --shadow-lg:
     0 12px 24px rgba(28, 22, 17, 0.12), 0 4px 10px rgba(28, 22, 17, 0.08);
 }
+
+/* -----------------------------------------------------------------------
+   Custom scrollbar — warm-neutral, not accent-colored (scrollbars aren't
+   actionable elements, so they shouldn't compete with clay for attention).
+   Reads the same tokens as everything else, so it auto-adapts in .dark.
+----------------------------------------------------------------------- */
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-default) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-default);
+    border-radius: var(--radius-full);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-text-tertiary);
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-button {
+    display: none;
+  }
+}
