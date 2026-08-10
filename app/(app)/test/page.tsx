@@ -5,6 +5,7 @@ import StatusBadge from "@/components/StatusBadge";
 import Avatar from "@/components/Avatar";
 import FileTypeTag from "@/components/FileTypeTag";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 interface TeamRow {
   id: number;
@@ -90,16 +91,16 @@ const page = () => {
       render: (_value, row) => (
         <div className="flex items-center gap-sm">
           <FileTypeTag text={row.fileType} />
-          <span className="type-body text-primary truncate">
-            {row.title}
-          </span>
+          <span className="type-body text-primary truncate">{row.title}</span>
         </div>
       ),
     },
     {
       key: "status",
       label: "Status",
-      render: (value) => <StatusBadge status={value as DocumentRow["status"]} />,
+      render: (value) => (
+        <StatusBadge status={value as DocumentRow["status"]} />
+      ),
     },
     {
       key: "ownerName",
@@ -115,9 +116,7 @@ const page = () => {
       key: "uploadedAt",
       label: "Uploaded",
       render: (value) => (
-        <span className="type-caption text-secondary">
-          {value as string}
-        </span>
+        <span className="type-caption text-secondary">{value as string}</span>
       ),
     },
     {
@@ -139,7 +138,7 @@ const page = () => {
 
   return (
     <div className="h-4xl p-4 flex flex-col gap-xl">
-      <div>
+      {/* <div>
         <h2 className="type-h3 text-primary mb-sm">Teams</h2>
         <Table<TeamRow> data={teams} columns={teamColumns} keyField="id" />
       </div>
@@ -150,7 +149,15 @@ const page = () => {
           columns={documentColumns}
           keyField="id"
         />
-      </div>
+      </div> */}
+      <Modal
+        title="Add member"
+        hasSecondButton={true}
+        primaryLabel="Add"
+        onClose={() => {}}
+      >
+        <Button>Hello</Button>
+      </Modal>
     </div>
   );
 };
