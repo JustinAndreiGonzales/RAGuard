@@ -5,7 +5,10 @@ import StatusBadge from "@/components/StatusBadge";
 import Avatar from "@/components/Avatar";
 import FileTypeTag from "@/components/FileTypeTag";
 import Button from "@/components/Button";
-import Modal from "@/components/Modal";
+import Toast from "@/components/Toast";
+import EmptyState from "@/components/EmptyState";
+import CitationChip from "@/components/CitationChip";
+import { Inbox, FolderOpen } from "lucide-react";
 
 interface TeamRow {
   id: number;
@@ -150,14 +153,77 @@ const page = () => {
           keyField="id"
         />
       </div> */}
-      <Modal
-        title="Add member"
-        hasSecondButton={true}
-        primaryLabel="Add"
-        onClose={() => {}}
-      >
-        <Button>Hello</Button>
-      </Modal>
+      <div className="flex flex-col gap-sm">
+        <h2 className="type-h3 text-primary">Toast</h2>
+        <Toast
+          variant="success"
+          message="Document uploaded successfully."
+          onDismiss={() => {}}
+        />
+        <Toast
+          variant="error"
+          message="Failed to upload document. Please try again."
+          onDismiss={() => {}}
+        />
+        <Toast
+          variant="info"
+          message="Your session will expire in 5 minutes."
+          onDismiss={() => {}}
+        />
+        <Toast
+          variant="info"
+          message="This toast cannot be dismissed."
+          dismissible={false}
+        />
+      </div>
+
+      <div className="flex flex-col gap-sm">
+        <h2 className="type-h3 text-primary">Empty State</h2>
+        <div className="grid grid-cols-2 gap-xl">
+          <div className="p-xl border border-line rounded-lg">
+            <EmptyState
+              icon={<Inbox />}
+              heading="No conversations yet"
+              body="Ask something to get started."
+            />
+          </div>
+          <div className="p-xl border border-line rounded-lg">
+            <EmptyState
+              icon={<FolderOpen />}
+              heading="No documents yet"
+              body="Upload a document to start building your knowledge base."
+              ctaLabel="Upload document"
+              onCtaClick={() => {}}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-sm">
+        <h2 className="type-h3 text-primary">Citation Chip</h2>
+        <p className="type-body-lg text-primary">
+          Employees are entitled to 15 days of paid leave per year, accrued
+          monthly and carried over up to a maximum of 5 unused days.{" "}
+        </p>
+        <div className="flex gap-xs">
+          <CitationChip
+            documentTitle="Employee Handbook 2024.pdf"
+            excerpt="Full-time employees accrue 1.25 days of paid leave per month, for a total of 15 days annually. Up to 5 unused days may be carried over into the following calendar year."
+            documentHref="/documents/1"
+          />
+          <CitationChip
+            documentTitle="HR Policy — Leave and Time Off (Quarterly Update).md"
+            excerpt="Carried-over leave must be used within the first quarter of the new year or it is forfeited."
+            documentHref="/documents/2"
+          />
+          <CitationChip
+            documentTitle="Onboarding Guide.docx"
+            excerpt="See the benefits section for a summary of leave, sick time, and holiday policies."
+            documentHref="/documents/3"
+            expanded
+          />
+        </div>
+      </div>
     </div>
   );
 };
