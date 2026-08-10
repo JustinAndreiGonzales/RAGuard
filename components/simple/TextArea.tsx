@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useId } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 
 interface TextAreaProps extends Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,

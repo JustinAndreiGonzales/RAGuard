@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 
 interface SelectOption {
   value: string;
@@ -175,10 +175,7 @@ const Select = ({
                 >
                   <span className="truncate">{opt.label}</span>
                   {isSelected && (
-                    <Check
-                      size={15}
-                      className="shrink-0 text-accent-default"
-                    />
+                    <Check size={15} className="shrink-0 text-accent-default" />
                   )}
                 </li>
               );

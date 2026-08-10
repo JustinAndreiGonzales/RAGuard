@@ -1,5 +1,5 @@
 import { CheckCircle2, Info, X, XCircle } from "lucide-react";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 
 type ToastVariant = "success" | "error" | "info";
 

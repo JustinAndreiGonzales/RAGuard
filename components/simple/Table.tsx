@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 
 export interface Column<T> {
   key: keyof T & string;
@@ -67,7 +67,10 @@ const TableRow = <T,>({
         return (
           <td
             key={col.key}
-            className={cn("px-md", col.align === "right" ? "text-right" : "text-left")}
+            className={cn(
+              "px-md",
+              col.align === "right" ? "text-right" : "text-left",
+            )}
           >
             <div
               className={cn(

@@ -1,17 +1,24 @@
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 import { LucideIcon } from "lucide-react";
 
 type NavItemProps = {
   isActive?: boolean;
   Icon?: LucideIcon | null;
   label: string;
+  collapsed?: boolean;
 };
 
-const NavItem = ({ isActive = false, Icon = null, label }: NavItemProps) => {
+const NavItem = ({
+  isActive = false,
+  Icon = null,
+  label,
+  collapsed = false,
+}: NavItemProps) => {
   return (
     <div
       className={cn(
-        "h-[40px] w-full px-md rounded-md flex items-center gap-sm relative",
+        "h-[40px] w-full rounded-md flex items-center relative",
+        collapsed ? "justify-center px-0" : "px-md gap-sm",
         isActive ? "bg-accent-subtle-bg text-accent-default" : "text-secondary",
         "hover:bg-canvas",
       )}
@@ -21,7 +28,9 @@ const NavItem = ({ isActive = false, Icon = null, label }: NavItemProps) => {
       )}
 
       {Icon && <Icon className="h-[20px] w-[20px] shrink-0" />}
-      <span className="type-label truncate">{label}</span>
+      <span className={cn("type-label truncate", collapsed && "sr-only")}>
+        {label}
+      </span>
     </div>
   );
 };
