@@ -1,6 +1,7 @@
 import {
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -21,6 +22,8 @@ export const statusEnum = pgEnum("status", [
   "failed",
 ]);
 export const principalTypeEnum = pgEnum("principal_type", ["user", "team"]);
+export const visibilityEnum = pgEnum("visibility", ["private", "public"]);
+export const messageRoleEnum = pgEnum("message_role", ["user", "assistant"]);
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -64,6 +67,7 @@ export const documents = pgTable(
         onDelete: "restrict",
       })
       .notNull(),
+    visibility: visibilityEnum("visibility").default("private").notNull(),
     title: text("title").notNull(),
     originalFileName: text("original_file_name").notNull(),
     fileType: fileTypeEnum("file_type").notNull(),
@@ -78,6 +82,7 @@ export const documents = pgTable(
   (table) => [
     index("document_owner_id_idx").on(table.ownerId),
     index("document_status_idx").on(table.status),
+    index("document_visibility_idx").on(table.visibility),
   ],
 );
 
@@ -120,6 +125,37 @@ export const documentPermissions = pgTable(
   (table) => [
     unique().on(table.documentId, table.principalType, table.principalId),
   ],
+);
+
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    title: text("title").notNull().default("New conversation"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => [index("conversation_user_id_idx").on(table.userId)],
+);
+
+export const messages = pgTable(
+  "messages",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    conversationId: uuid("conversation_id")
+      .references(() => conversations.id, { onDelete: "cascade" })
+      .notNull(),
+    role: messageRoleEnum("role").notNull(),
+    content: text("content").notNull(),
+    citations: jsonb("citations").$type<
+      { documentId: string; documentTitle: string; excerpt: string }[]
+    >(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("message_conversation_id_idx").on(table.conversationId)],
 );
 
 // auth tables

@@ -15,6 +15,13 @@
       "when": 1786086276435,
       "tag": "0001_melted_agent_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786427631115,
+      "tag": "0002_broad_silk_fever",
+      "breakpoints": true
     }
   ]
 }

@@ -148,6 +148,7 @@ const DocumentsPage = () => {
         const newDoc: MockDocument = {
           id: newDocId,
           ownerId: mockCurrentUser.id,
+          visibility: "private",
           title: file.name,
           originalFileName: file.name,
           fileType: inferFileType(file.name),

@@ -37,5 +37,5 @@ ${userInput}
 
 Answer the <question> using only the information inside <context>.
     `;
-  return prompt;
+  return { prompt, chunks: relevantChunks };
 }

@@ -42,6 +42,19 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
 
+  const visibilityRaw = formData.get("visibility");
+  const visibility = visibilityRaw === null ? "private" : String(visibilityRaw);
+  if (visibility !== "private" && visibility !== "public")
+    return NextResponse.json(
+      { error: "Invalid visibility value" },
+      { status: 400 },
+    );
+  if (visibility === "public" && session.user.role !== "admin")
+    return NextResponse.json(
+      { error: "Only admins can upload public documents" },
+      { status: 403 },
+    );
+
   const bytes = await file.arrayBuffer();
 
   // Step 2: Upload + create row
@@ -62,6 +75,7 @@ export async function POST(request: NextRequest) {
   await db.insert(documents).values({
     id: documentId,
     ownerId: session.user.id,
+    visibility,
     title: file.name,
     originalFileName: file.name,
     fileType,

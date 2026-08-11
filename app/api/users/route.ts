@@ -12,8 +12,22 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const email = searchParams.get("email");
 
-  if (!email)
-    return NextResponse.json({ error: "No email provided" }, { status: 400 });
+  if (!email) {
+    // No email filter: admin-only "list all users" mode.
+    if (session.user.role !== "admin")
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+    const allUsers = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        role: users.role,
+      })
+      .from(users);
+
+    return NextResponse.json(allUsers);
+  }
 
   const user = await db
     .select({

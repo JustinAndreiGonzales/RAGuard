@@ -82,6 +82,7 @@ export const mockDocuments: MockDocument[] = MOCK_EMPTY_DOCUMENTS
       {
         id: "doc-handbook",
         ownerId: "usr-alice",
+        visibility: "private",
         title: "Employee Handbook 2026.pdf",
         originalFileName: "employee-handbook-2026.pdf",
         fileType: "pdf",
@@ -96,6 +97,7 @@ export const mockDocuments: MockDocument[] = MOCK_EMPTY_DOCUMENTS
       {
         id: "doc-roadmap",
         ownerId: "usr-alice",
+        visibility: "private",
         title: "Q3 Roadmap Notes.docx",
         originalFileName: "q3-roadmap-notes.docx",
         fileType: "docx",
@@ -110,6 +112,7 @@ export const mockDocuments: MockDocument[] = MOCK_EMPTY_DOCUMENTS
       {
         id: "doc-runbook",
         ownerId: "usr-ben",
+        visibility: "public",
         title: "Security Incident Runbook.md",
         originalFileName: "security-incident-runbook.md",
         fileType: "md",
@@ -124,6 +127,7 @@ export const mockDocuments: MockDocument[] = MOCK_EMPTY_DOCUMENTS
       {
         id: "doc-vendor",
         ownerId: "usr-carla",
+        visibility: "private",
         title: "Vendor Contract Draft.pdf",
         originalFileName: "vendor-contract-draft.pdf",
         fileType: "pdf",
@@ -138,6 +142,7 @@ export const mockDocuments: MockDocument[] = MOCK_EMPTY_DOCUMENTS
       {
         id: "doc-legacy",
         ownerId: "usr-ben",
+        visibility: "private",
         title: "Legacy Migration Notes.txt",
         originalFileName: "legacy-migration-notes.txt",
         fileType: "txt",
