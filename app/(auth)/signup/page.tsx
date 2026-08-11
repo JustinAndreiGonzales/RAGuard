@@ -7,33 +7,51 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/simple/Button";
 import Input from "@/components/simple/Input";
+import { getErrorMessage } from "@/lib/api/errors";
+import { useRegisterMutation } from "@/lib/hooks/useAuth";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
+  const registerMutation = useRegisterMutation();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const name = String(formData.get("name") ?? "");
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
+    const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
     setError(null);
-    setIsSubmitting(true);
+    setConfirmError(null);
+
+    if (password !== confirmPassword) {
+      setConfirmError("Passwords do not match");
+      return;
+    }
+
+    try {
+      await registerMutation.mutateAsync({ email, password, name });
+    } catch (err) {
+      setError(getErrorMessage(err));
+      return;
+    }
 
     const result = await signIn("credentials", {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email,
+      password,
       redirect: false,
     });
 
-    setIsSubmitting(false);
-
     if (result?.error) {
-      setError("Invalid email or password");
+      setError("Account created — please log in.");
+      router.push("/login");
       return;
     }
-    // Prevent a previous session's cached data (documents, conversations, ...)
-    // from briefly leaking into this one on shared/kiosk browsers.
+
     queryClient.clear();
     router.push("/");
   }
@@ -42,14 +60,24 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-canvas">
       <div className="w-[400px] bg-surface rounded-xl shadow-md p-2xl flex flex-col gap-md">
         <h1 className="type-h2 text-primary">RAGuard</h1>
-        <h2 className="type-h2 text-primary">Log in</h2>
+        <h2 className="type-h2 text-primary">Create account</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-md">
+          <Input label="Name" type="text" name="name" required />
           <Input label="Email" type="email" name="email" required />
           <Input
             label="Password"
             type="password"
             passwordToggle
             name="password"
+            required
+          />
+          <Input
+            label="Confirm password"
+            type="password"
+            passwordToggle
+            name="confirmPassword"
+            state={confirmError ? "error" : "default"}
+            errorText={confirmError ?? ""}
             required
           />
           {error && (
@@ -61,15 +89,15 @@ export default function LoginPage() {
             variant="primary"
             fullWidth
             type="submit"
-            state={isSubmitting ? "loading" : "default"}
+            state={registerMutation.isPending ? "loading" : "default"}
           >
-            Log in
+            Create account
           </Button>
         </form>
         <p className="type-caption text-tertiary text-center">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-accent-default hover:text-accent-hover">
-            Sign up
+          Already have an account?{" "}
+          <Link href="/login" className="text-accent-default hover:text-accent-hover">
+            Log in
           </Link>
         </p>
       </div>

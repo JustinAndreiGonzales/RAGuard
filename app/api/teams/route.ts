@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
             id: teams.id,
             name: teams.name,
           })
-          .from(teams);
+          .from(teams)
+          .innerJoin(teamMembers, eq(teams.id, teamMembers.teamId))
+          .where(eq(teamMembers.userId, session.user.id));
   return NextResponse.json(availableTeams);
 }
 

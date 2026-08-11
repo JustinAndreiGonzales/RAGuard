@@ -8,6 +8,7 @@ import {
   LogOut,
   MessageSquare,
   User,
+  UserCog,
   Users,
 } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -15,7 +16,7 @@ import { cn } from "../lib/utils";
 import Avatar from "../simple/Avatar";
 import NavItem from "../simple/NavItem";
 
-type NavKey = "chat" | "documents" | "teams";
+type NavKey = "chat" | "documents" | "teams" | "users";
 type Role = "admin" | "user";
 
 type SidebarProps = {
@@ -36,6 +37,7 @@ const NAV_ITEMS: { key: NavKey; label: string; icon: typeof MessageSquare }[] =
     { key: "chat", label: "Chat", icon: MessageSquare },
     { key: "documents", label: "Documents", icon: FileText },
     { key: "teams", label: "Teams", icon: Users },
+    { key: "users", label: "Users", icon: UserCog },
   ];
 
 const Sidebar = ({
@@ -65,7 +67,7 @@ const Sidebar = ({
   }, []);
 
   const navItems = NAV_ITEMS.filter(
-    (item) => item.key !== "teams" || role === "admin",
+    (item) => item.key !== "users" || role === "admin",
   );
 
   return (
@@ -100,20 +102,14 @@ const Sidebar = ({
 
       <nav className="flex flex-col gap-2xs">
         {navItems.map((item) => (
-          <button
+          <NavItem
             key={item.key}
-            type="button"
-            aria-current={activeNav === item.key ? "page" : undefined}
+            isActive={activeNav === item.key}
+            Icon={item.icon}
+            label={item.label}
+            collapsed={collapsed}
             onClick={() => onNavigate?.(item.key)}
-            className="w-full text-left"
-          >
-            <NavItem
-              isActive={activeNav === item.key}
-              Icon={item.icon}
-              label={item.label}
-              collapsed={collapsed}
-            />
-          </button>
+          />
         ))}
       </nav>
 

@@ -4,9 +4,9 @@ import { useState } from "react";
 import Sidebar from "@/components/compound/Sidebar";
 
 const page = () => {
-  const [activeNav, setActiveNav] = useState<"chat" | "documents" | "teams">(
-    "chat",
-  );
+  const [activeNav, setActiveNav] = useState<
+    "chat" | "documents" | "teams" | "users"
+  >("chat");
 
   return (
     <div className="flex">

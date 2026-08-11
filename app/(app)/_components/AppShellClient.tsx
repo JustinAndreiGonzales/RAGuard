@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -7,7 +8,7 @@ import GeneralLayout from "@/components/layout/general";
 import { ChatHistoryProvider } from "./ChatHistoryContext";
 import ChatSidebarHistory from "./ChatSidebarHistory";
 
-type NavKey = "chat" | "documents" | "teams";
+type NavKey = "chat" | "documents" | "teams" | "users";
 
 type AppShellClientProps = {
   role: "admin" | "user";
@@ -21,6 +22,7 @@ const ROUTE_BY_NAV: Record<NavKey, string> = {
   chat: "/",
   documents: "/documents",
   teams: "/teams",
+  users: "/admin/users",
 };
 
 const AppShellClient = ({
@@ -32,12 +34,15 @@ const AppShellClient = ({
 }: AppShellClientProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const activeNav: NavKey = pathname.startsWith("/documents")
     ? "documents"
     : pathname.startsWith("/teams")
       ? "teams"
-      : "chat";
+      : pathname.startsWith("/admin/users")
+        ? "users"
+        : "chat";
 
   return (
     <ChatHistoryProvider>
@@ -49,7 +54,10 @@ const AppShellClient = ({
         userEmail={userEmail}
         userInitials={userInitials}
         onAccountClick={() => router.push("/account")}
-        onSignOutClick={() => signOut({ callbackUrl: "/login" })}
+        onSignOutClick={() => {
+          queryClient.clear();
+          signOut({ callbackUrl: "/login" });
+        }}
         sidebarContent={
           activeNav === "chat" ? <ChatSidebarHistory /> : undefined
         }

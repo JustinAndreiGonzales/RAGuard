@@ -12,15 +12,17 @@ export interface TableProps<T> {
   columns: Column<T>[];
   data: T[];
   keyField: keyof T;
+  onRowClick?: (row: T) => void;
 }
 
 type TableRowProps<T> = {
   isSelected?: boolean;
   row: T;
   columns: Column<T>[];
+  onRowClick?: (row: T) => void;
 };
 
-const Table = <T,>({ columns, data, keyField }: TableProps<T>) => {
+const Table = <T,>({ columns, data, keyField, onRowClick }: TableProps<T>) => {
   return (
     <div className="rounded-lg bg-surface border border-line overflow-hidden">
       <table className="w-full border-collapse type-body">
@@ -41,7 +43,12 @@ const Table = <T,>({ columns, data, keyField }: TableProps<T>) => {
         </thead>
         <tbody>
           {data.map((row) => (
-            <TableRow key={String(row[keyField])} row={row} columns={columns} />
+            <TableRow
+              key={String(row[keyField])}
+              row={row}
+              columns={columns}
+              onRowClick={onRowClick}
+            />
           ))}
         </tbody>
       </table>
@@ -53,11 +60,14 @@ const TableRow = <T,>({
   isSelected = false,
   row,
   columns,
+  onRowClick,
 }: TableRowProps<T>) => {
   return (
     <tr
+      onClick={onRowClick ? () => onRowClick(row) : undefined}
       className={cn(
-        "border-b border-b-line-subtle last:border-b-0 cursor-pointer",
+        "border-b border-b-line-subtle last:border-b-0",
+        onRowClick && "cursor-pointer",
         "transition-colors hover:bg-canvas hover:shadow-sm",
         isSelected && "bg-accent-subtle-bg",
       )}

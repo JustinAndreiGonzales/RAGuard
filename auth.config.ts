@@ -14,5 +14,17 @@ export default {
       if (isAdminRoute) return isLoggedIn && auth.user.role === "admin";
       return isLoggedIn;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+        token.sub = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      session.user.id = token.sub as string;
+      session.user.role = token.role as "admin" | "user";
+      return session;
+    },
   },
 } satisfies NextAuthConfig;

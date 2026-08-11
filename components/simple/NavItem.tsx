@@ -6,6 +6,7 @@ type NavItemProps = {
   Icon?: LucideIcon | null;
   label: string;
   collapsed?: boolean;
+  onClick?: () => void;
 };
 
 const NavItem = ({
@@ -13,11 +14,15 @@ const NavItem = ({
   Icon = null,
   label,
   collapsed = false,
+  onClick,
 }: NavItemProps) => {
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
-        "h-[40px] w-full rounded-md flex items-center relative",
+        "h-[40px] w-full rounded-md flex items-center text-left relative",
         collapsed ? "justify-center px-0" : "px-md gap-sm",
         isActive ? "bg-accent-subtle-bg text-accent-default" : "text-secondary",
         "hover:bg-canvas",
@@ -31,7 +36,7 @@ const NavItem = ({
       <span className={cn("type-label truncate", collapsed && "sr-only")}>
         {label}
       </span>
-    </div>
+    </button>
   );
 };
 

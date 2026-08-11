@@ -1,31 +1,36 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useMemo, useState } from "react";
-import { formatDateGroupLabel } from "@/lib/format";
-import { MOCK_USER_HAS_DOCUMENT_ACCESS } from "@/lib/mock/data";
+import { useQueryClient } from "@tanstack/react-query";
 import {
-  buildInitialConversations,
-  generateMockReply,
-  type ChatMessage,
-  type Conversation,
-} from "@/lib/mock/chat";
-
-const MAX_TITLE_LENGTH = 48;
-
-const truncateTitle = (text: string) =>
-  text.length > MAX_TITLE_LENGTH
-    ? `${text.slice(0, MAX_TITLE_LENGTH)}…`
-    : text;
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { queryKeys } from "@/lib/api/queryKeys";
+import type { ConversationDetail, ConversationSummary } from "@/lib/api/types";
+import { streamChat } from "@/lib/chat/streamChat";
+import {
+  useConversationQuery,
+  useConversationsQuery,
+  useCreateConversationMutation,
+} from "@/lib/hooks/useConversations";
+import { useDocumentsQuery } from "@/lib/hooks/useDocuments";
+import { formatDateGroupLabel } from "@/lib/format";
 
 type ChatHistoryContextValue = {
-  conversations: Conversation[];
-  groupedConversations: [string, Conversation[]][];
+  conversations: ConversationSummary[];
+  groupedConversations: [string, ConversationSummary[]][];
   activeConversationId: string | null;
-  activeConversation: Conversation | null;
+  activeConversationDetail: ConversationDetail | undefined;
+  isActiveConversationLoading: boolean;
   setActiveConversationId: (id: string) => void;
   draft: string;
   setDraft: (value: string) => void;
   isStreaming: boolean;
+  pendingUserText: string | null;
+  streamingText: string;
   showNoAccessState: boolean;
   handleNewChat: () => void;
   handleSend: () => void;
@@ -36,129 +41,103 @@ const ChatHistoryContext = createContext<ChatHistoryContextValue | null>(
 );
 
 export const ChatHistoryProvider = ({ children }: { children: ReactNode }) => {
-  const [conversations, setConversations] = useState<Conversation[]>(() =>
-    buildInitialConversations(),
-  );
-  const [activeConversationId, setActiveConversationId] = useState<
+  const queryClient = useQueryClient();
+  const conversationsQuery = useConversationsQuery();
+  const createConversationMutation = useCreateConversationMutation();
+  const documentsQuery = useDocumentsQuery();
+
+  const [activeConversationId, setActiveConversationIdState] = useState<
     string | null
-  >(() => conversations[0]?.id ?? null);
+  >(null);
   const [draft, setDraft] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
+  const [pendingUserText, setPendingUserText] = useState<string | null>(null);
+  const [streamingText, setStreamingText] = useState("");
 
-  const showNoAccessState = !MOCK_USER_HAS_DOCUMENT_ACCESS;
-  const activeConversation =
-    conversations.find((c) => c.id === activeConversationId) ?? null;
+  const activeConversationDetailQuery = useConversationQuery(
+    activeConversationId,
+  );
+
+  const conversations = useMemo(
+    () => conversationsQuery.data ?? [],
+    [conversationsQuery.data],
+  );
+  const showNoAccessState =
+    !documentsQuery.isLoading && (documentsQuery.data?.length ?? 0) === 0;
 
   const groupedConversations = useMemo(() => {
     const sorted = [...conversations].sort(
-      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime(),
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
-    const groups = new Map<string, Conversation[]>();
+    const groups = new Map<string, ConversationSummary[]>();
     for (const conversation of sorted) {
-      const label = formatDateGroupLabel(conversation.updatedAt);
+      const label = formatDateGroupLabel(new Date(conversation.updatedAt));
       if (!groups.has(label)) groups.set(label, []);
       groups.get(label)!.push(conversation);
     }
     return Array.from(groups.entries());
   }, [conversations]);
 
-  const handleNewChat = () => {
-    const newConversation: Conversation = {
-      id: crypto.randomUUID(),
-      title: "New conversation",
-      messages: [],
-      updatedAt: new Date(),
-    };
-    setConversations((prev) => [newConversation, ...prev]);
-    setActiveConversationId(newConversation.id);
+  const setActiveConversationId = (id: string) => {
+    setActiveConversationIdState(id);
+  };
+
+  const handleNewChat = async () => {
+    const conversation = await createConversationMutation.mutateAsync(
+      undefined,
+    );
+    setActiveConversationIdState(conversation.id);
     setDraft("");
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!draft.trim() || isStreaming || showNoAccessState) return;
 
     const userText = draft.trim();
-    const truncatedTitle = truncateTitle(userText);
-    const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: "user",
-      content: userText,
-      createdAt: new Date(),
-    };
-
-    let targetId = activeConversationId;
-    let turnIndex = 0;
-
-    if (targetId) {
-      const existing = conversations.find((c) => c.id === targetId);
-      turnIndex =
-        existing?.messages.filter((m) => m.role === "assistant").length ?? 0;
-
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.id === targetId
-            ? {
-                ...c,
-                title:
-                  c.title === "New conversation" ? truncatedTitle : c.title,
-                messages: [...c.messages, userMessage],
-                updatedAt: new Date(),
-              }
-            : c,
-        ),
-      );
-    } else {
-      const newId = crypto.randomUUID();
-      targetId = newId;
-      setConversations((prev) => [
-        {
-          id: newId,
-          title: truncatedTitle,
-          messages: [userMessage],
-          updatedAt: new Date(),
-        },
-        ...prev,
-      ]);
-      setActiveConversationId(newId);
-    }
+    const targetId = activeConversationId;
 
     setDraft("");
+    setPendingUserText(userText);
+    setStreamingText("");
     setIsStreaming(true);
 
-    const finalTargetId = targetId;
-    setTimeout(() => {
-      const reply = generateMockReply(userText, turnIndex);
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: reply.content,
-        citations: reply.citations,
-        createdAt: new Date(),
-      };
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.id === finalTargetId
-            ? {
-                ...c,
-                messages: [...c.messages, assistantMessage],
-                updatedAt: new Date(),
-              }
-            : c,
-        ),
-      );
+    try {
+      const result = await streamChat({
+        userInput: userText,
+        conversationId: targetId,
+        onChunk: (chunk) => setStreamingText((prev) => prev + chunk),
+      });
+
+      const resolvedId = result.conversationId || targetId;
+      if (resolvedId) {
+        if (!targetId) setActiveConversationIdState(resolvedId);
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.conversations.detail(resolvedId),
+        });
+      }
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.conversations.all,
+      });
+    } finally {
       setIsStreaming(false);
-    }, 900);
+      setPendingUserText(null);
+      setStreamingText("");
+    }
   };
 
   const value: ChatHistoryContextValue = {
     conversations,
     groupedConversations,
     activeConversationId,
-    activeConversation,
+    activeConversationDetail: activeConversationDetailQuery.data,
+    isActiveConversationLoading: activeConversationDetailQuery.isLoading,
     setActiveConversationId,
     draft,
     setDraft,
     isStreaming,
+    pendingUserText,
+    streamingText,
     showNoAccessState,
     handleNewChat,
     handleSend,

@@ -6,6 +6,7 @@ type AvatarProps = {
   alt?: string;
   src?: string | null;
   initials?: string;
+  onClick?: () => void;
 };
 
 const SIZE_CLASS = {
@@ -25,28 +26,35 @@ const Avatar = ({
   alt = "Avatar",
   src = null,
   initials,
+  onClick,
 }: AvatarProps) => {
-  return (
-    <div
-      className={cn(
-        "shrink-0 flex items-center justify-center overflow-hidden rounded-full",
-        !src && "bg-accent-subtle-bg text-accent-default",
-        SIZE_CLASS[size],
-      )}
-    >
-      {src ? (
-        <Image
-          src={src}
-          alt={alt}
-          width={SIZE_PX[size]}
-          height={SIZE_PX[size]}
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <p className="type-label">{initials}</p>
-      )}
-    </div>
+  const className = cn(
+    "shrink-0 flex items-center justify-center overflow-hidden rounded-full",
+    !src && "bg-accent-subtle-bg text-accent-default",
+    SIZE_CLASS[size],
   );
+
+  const content = src ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={SIZE_PX[size]}
+      height={SIZE_PX[size]}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <p className="type-label">{initials}</p>
+  );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={className}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={className}>{content}</div>;
 };
 
 export default Avatar;

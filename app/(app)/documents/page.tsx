@@ -10,14 +10,19 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   ChangeEvent,
   DragEvent,
-  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import type { AxiosProgressEvent } from "axios";
+import ConfirmDeleteModal from "@/components/compound/ConfirmDeleteModal";
+import ShareModal from "@/components/compound/ShareModal";
+import { useToast } from "@/components/providers/ToastProvider";
 import Avatar from "@/components/simple/Avatar";
 import Button from "@/components/simple/Button";
 import EmptyState from "@/components/simple/EmptyState";
@@ -25,90 +30,56 @@ import FileTypeTag from "@/components/simple/FileTypeTag";
 import Modal from "@/components/simple/Modal";
 import StatusBadge from "@/components/simple/StatusBadge";
 import Table, { Column } from "@/components/simple/Table";
-import Toast from "@/components/simple/Toast";
+import VisibilityToggle from "@/components/simple/VisibilityToggle";
+import { getErrorMessage } from "@/lib/api/errors";
+import type { DocumentListItem, FileType, Visibility } from "@/lib/api/types";
 import { formatFileSize, formatRelativeTime, getInitials } from "@/lib/format";
 import {
-  getDocumentOwner,
-  getDocumentSharedVia,
-  mockCurrentUser,
-  mockDocuments,
-  type MockDocument,
-} from "@/lib/mock/data";
+  useDeleteDocumentMutation,
+  useDocumentQuery,
+  useDocumentsQuery,
+  useUploadDocumentMutation,
+} from "@/lib/hooks/useDocuments";
 
-type DocumentTableRow = MockDocument & {
-  ownerName: string;
-  ownerInitials: string;
-  sharedVia: { kind: "direct" | "team" | "none"; label: string };
-};
+type UploadStage = "idle" | "file-selected" | "uploading" | "polling";
 
-type UploadStage =
-  | "idle"
-  | "file-selected"
-  | "uploading"
-  | "pending"
-  | "processing"
-  | "ready"
-  | "failed";
-
-const FILE_TYPE_BY_EXTENSION: Record<string, MockDocument["fileType"]> = {
+const FILE_TYPE_BY_EXTENSION: Record<string, FileType> = {
   pdf: "pdf",
   txt: "txt",
   docx: "docx",
   md: "md",
 };
 
-const inferFileType = (fileName: string): MockDocument["fileType"] => {
+const inferFileType = (fileName: string): FileType => {
   const ext = fileName.split(".").pop()?.toLowerCase() ?? "";
   return FILE_TYPE_BY_EXTENSION[ext] ?? "txt";
 };
 
 const DocumentsPage = () => {
-  const [documents, setDocuments] = useState<MockDocument[]>(() => [
-    ...mockDocuments,
-  ]);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { showToast } = useToast();
+  const me = session?.user;
+
+  const documentsQuery = useDocumentsQuery();
+  const uploadMutation = useUploadDocumentMutation();
+  const deleteMutation = useDeleteDocumentMutation();
+
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [uploadStage, setUploadStage] = useState<UploadStage>("idle");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [toast, setToast] = useState<{
-    variant: "success" | "error" | "info";
-    message: string;
-  } | null>(null);
+  const [uploadDocumentId, setUploadDocumentId] = useState<string | null>(null);
+  const [uploadVisibility, setUploadVisibility] = useState<Visibility>("private");
+  const [shareTarget, setShareTarget] = useState<{ id: string; title: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 4000);
-    return () => clearTimeout(timer);
-  }, [toast]);
+  const uploadPollQuery = useDocumentQuery(uploadDocumentId, {
+    enabled: uploadStage === "polling",
+  });
 
-  const rows: DocumentTableRow[] = useMemo(
-    () =>
-      documents.map((doc) => {
-        const owner = getDocumentOwner(doc);
-        return {
-          ...doc,
-          ownerName: owner.name ?? owner.email,
-          ownerInitials: getInitials(owner.name ?? owner.email),
-          sharedVia: getDocumentSharedVia(doc),
-        };
-      }),
-    [documents],
-  );
-
-  const updateDocumentStatus = (
-    id: string,
-    status: MockDocument["status"],
-    processingError: string | null = null,
-  ) => {
-    setDocuments((prev) =>
-      prev.map((d) =>
-        d.id === id
-          ? { ...d, status, processingError, updatedAt: new Date() }
-          : d,
-      ),
-    );
-  };
+  const rows = documentsQuery.data ?? [];
 
   const handleFileSelected = (file: File) => {
     setSelectedFile(file);
@@ -126,69 +97,42 @@ const DocumentsPage = () => {
     setUploadStage("idle");
     setSelectedFile(null);
     setUploadProgress(0);
+    setUploadDocumentId(null);
+    setUploadVisibility("private");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const startUpload = () => {
+  const startUpload = async () => {
     if (!selectedFile) return;
-    const file = selectedFile;
 
     setUploadStage("uploading");
     setUploadProgress(0);
 
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 20;
-      setUploadProgress(Math.min(progress, 100));
-
-      if (progress >= 100) {
-        clearInterval(interval);
-
-        const newDocId = crypto.randomUUID();
-        const newDoc: MockDocument = {
-          id: newDocId,
-          ownerId: mockCurrentUser.id,
-          visibility: "private",
-          title: file.name,
-          originalFileName: file.name,
-          fileType: inferFileType(file.name),
-          storagePath: "",
-          fileSizeBytes: file.size,
-          status: "pending",
-          processingError: null,
-          embeddingModel: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-        setDocuments((prev) => [newDoc, ...prev]);
-        setUploadStage("pending");
-
-        setTimeout(() => {
-          setUploadStage("processing");
-          updateDocumentStatus(newDocId, "processing");
-
-          setTimeout(() => {
-            const failed = file.name.toLowerCase().includes("fail");
-            const finalStatus = failed ? "failed" : "ready";
-            const error = failed ? "Simulated processing failure." : null;
-            setUploadStage(finalStatus);
-            updateDocumentStatus(newDocId, finalStatus, error);
-            if (failed) {
-              setToast({
-                variant: "error",
-                message: `Failed to process ${file.name}.`,
-              });
-            }
-          }, 1200);
-        }, 800);
-      }
-    }, 150);
+    try {
+      const result = await uploadMutation.mutateAsync({
+        file: selectedFile,
+        visibility: me?.role === "admin" ? uploadVisibility : undefined,
+        onUploadProgress: (event: AxiosProgressEvent) => {
+          if (event.total) {
+            setUploadProgress(Math.round((event.loaded / event.total) * 100));
+          }
+        },
+      });
+      setUploadDocumentId(result.documentId);
+      setUploadStage("polling");
+    } catch {
+      setUploadStage("file-selected");
+    }
   };
+
+  const uploadTerminalStatus =
+    uploadStage === "polling" &&
+    (uploadPollQuery.data?.status === "ready" || uploadPollQuery.data?.status === "failed");
 
   const handlePrimaryAction = () => {
     if (uploadStage === "file-selected") {
       startUpload();
-    } else if (uploadStage === "ready" || uploadStage === "failed") {
+    } else if (uploadTerminalStatus) {
       closeUploadModal();
     }
   };
@@ -196,103 +140,120 @@ const DocumentsPage = () => {
   const primaryDisabled =
     uploadStage === "idle" ||
     uploadStage === "uploading" ||
-    uploadStage === "pending" ||
-    uploadStage === "processing";
+    (uploadStage === "polling" && !uploadTerminalStatus);
 
   const primaryLabel =
     uploadStage === "uploading"
       ? "Uploading…"
-      : uploadStage === "ready" || uploadStage === "failed"
+      : uploadTerminalStatus
         ? "Done"
         : "Upload";
 
-  const columns: Column<DocumentTableRow>[] = [
-    {
-      key: "title",
-      label: "Title",
-      render: (_v, row) => (
-        <div className="flex items-center gap-sm min-w-0">
-          <FileTypeTag text={row.fileType.toUpperCase()} />
-          <span className="type-body text-primary truncate">{row.title}</span>
-        </div>
-      ),
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (v) => <StatusBadge status={v as MockDocument["status"]} />,
-    },
-    {
-      key: "ownerName",
-      label: "Owner",
-      render: (_v, row) => (
-        <div className="flex items-center gap-xs min-w-0">
-          <Avatar size="sm" initials={row.ownerInitials} />
-          <span className="type-body-sm text-primary truncate">
-            {row.ownerName}
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await deleteMutation.mutateAsync(deleteTarget.id);
+      showToast("success", `${deleteTarget.title} deleted`);
+      setDeleteTarget(null);
+    } catch (err) {
+      showToast("error", getErrorMessage(err));
+    }
+  };
+
+  const columns: Column<DocumentListItem>[] = useMemo(
+    () => [
+      {
+        key: "title",
+        label: "Title",
+        render: (_v, row) => (
+          <div className="flex items-center gap-sm min-w-0">
+            <FileTypeTag text={row.fileType.toUpperCase()} />
+            <span className="type-body text-primary truncate">{row.title}</span>
+          </div>
+        ),
+      },
+      {
+        key: "status",
+        label: "Status",
+        render: (v) => <StatusBadge status={v as DocumentListItem["status"]} />,
+      },
+      {
+        key: "owner",
+        label: "Owner",
+        render: (_v, row) => (
+          <div className="flex items-center gap-xs min-w-0">
+            <Avatar size="sm" initials={getInitials(row.owner)} />
+            <span className="type-body-sm text-primary truncate">{row.owner}</span>
+          </div>
+        ),
+      },
+      {
+        key: "sharedVia",
+        label: "Shared via",
+        render: (_v, row) => {
+          const Icon =
+            row.sharedVia === "team" ? Users : row.sharedVia === "user" ? UserPlus : Minus;
+          const label =
+            row.sharedVia === "team"
+              ? `Team - ${row.sharedName ?? "Unknown"}`
+              : row.sharedVia === "user"
+                ? "Direct"
+                : "—";
+          return (
+            <div className="flex items-center gap-xs text-secondary">
+              <Icon className="h-md w-md shrink-0" />
+              <span className="type-body-sm truncate">{label}</span>
+            </div>
+          );
+        },
+      },
+      {
+        key: "createdAt",
+        label: "Uploaded",
+        render: (v) => (
+          <span className="type-caption text-tertiary">
+            {formatRelativeTime(new Date(v as string))}
           </span>
-        </div>
-      ),
-    },
-    {
-      key: "sharedVia",
-      label: "Shared via",
-      render: (_v, row) => {
-        const Icon =
-          row.sharedVia.kind === "team"
-            ? Users
-            : row.sharedVia.kind === "direct"
-              ? UserPlus
-              : Minus;
-        return (
-          <div className="flex items-center gap-xs text-secondary">
-            <Icon className="h-md w-md shrink-0" />
-            <span className="type-body-sm truncate">{row.sharedVia.label}</span>
-          </div>
-        );
+        ),
       },
-    },
-    {
-      key: "createdAt",
-      label: "Uploaded",
-      render: (v) => (
-        <span className="type-caption text-tertiary">
-          {formatRelativeTime(v as Date)}
-        </span>
-      ),
-    },
-    {
-      key: "id",
-      label: "Actions",
-      align: "right",
-      render: (_v, row) => {
-        const canManage =
-          mockCurrentUser.role === "admin" ||
-          row.ownerId === mockCurrentUser.id;
-        if (!canManage) return null;
-        return (
-          <div className="flex items-center gap-xs justify-end">
-            <Button
-              variant="ghost"
-              size="sm"
-              icon="leading"
-              iconElement={<Share2 className="h-md w-md" />}
-              aria-label={`Share ${row.title}`}
-              onClick={() => console.log("Share (stub)", row.id)}
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              icon="leading"
-              iconElement={<Trash2 className="h-md w-md" />}
-              aria-label={`Delete ${row.title}`}
-              onClick={() => console.log("Delete (stub)", row.id)}
-            />
-          </div>
-        );
+      {
+        key: "id",
+        label: "Actions",
+        align: "right",
+        render: (_v, row) => {
+          const canManage = me?.role === "admin" || row.owner === me?.name;
+          if (!canManage) return null;
+          return (
+            <div className="flex items-center gap-xs justify-end">
+              <Button
+                variant="ghost"
+                size="sm"
+                icon="leading"
+                iconElement={<Share2 className="h-md w-md" />}
+                aria-label={`Share ${row.title}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShareTarget({ id: row.id, title: row.title });
+                }}
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                icon="leading"
+                iconElement={<Trash2 className="h-md w-md" />}
+                aria-label={`Delete ${row.title}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteTarget({ id: row.id, title: row.title });
+                }}
+              />
+            </div>
+          );
+        },
       },
-    },
-  ];
+    ],
+    [me?.role, me?.name],
+  );
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -307,7 +268,7 @@ const DocumentsPage = () => {
 
   return (
     <div className="p-xl">
-      {documents.length === 0 ? (
+      {!documentsQuery.isLoading && rows.length === 0 ? (
         <div className="min-h-[400px] flex items-center justify-center">
           <EmptyState
             icon={<FileText />}
@@ -330,10 +291,11 @@ const DocumentsPage = () => {
               Upload
             </Button>
           </div>
-          <Table<DocumentTableRow>
+          <Table<DocumentListItem>
             columns={columns}
             data={rows}
             keyField="id"
+            onRowClick={(row) => router.push(`/documents/${row.id}`)}
           />
         </>
       )}
@@ -374,9 +336,7 @@ const DocumentsPage = () => {
               </div>
             ) : (
               <div className="flex items-center gap-sm p-sm border border-line rounded-md">
-                <FileTypeTag
-                  text={inferFileType(selectedFile!.name).toUpperCase()}
-                />
+                <FileTypeTag text={inferFileType(selectedFile!.name).toUpperCase()} />
                 <div className="flex-1 min-w-0">
                   <p className="type-body-sm text-primary truncate">
                     {selectedFile!.name}
@@ -398,6 +358,13 @@ const DocumentsPage = () => {
               </div>
             )}
 
+            {uploadStage === "file-selected" && me?.role === "admin" && (
+              <VisibilityToggle
+                value={uploadVisibility}
+                onChange={setUploadVisibility}
+              />
+            )}
+
             {uploadStage === "uploading" && (
               <div className="h-2xs w-full rounded-full bg-canvas overflow-hidden">
                 <div
@@ -407,22 +374,29 @@ const DocumentsPage = () => {
               </div>
             )}
 
-            {(uploadStage === "pending" ||
-              uploadStage === "processing" ||
-              uploadStage === "ready" ||
-              uploadStage === "failed") && <StatusBadge status={uploadStage} />}
+            {uploadStage === "polling" && (
+              <StatusBadge status={uploadPollQuery.data?.status ?? "pending"} />
+            )}
           </div>
         </Modal>
       )}
 
-      {toast && (
-        <div className="fixed bottom-lg right-lg z-50">
-          <Toast
-            variant={toast.variant}
-            message={toast.message}
-            onDismiss={() => setToast(null)}
-          />
-        </div>
+      {shareTarget && (
+        <ShareModal
+          documentId={shareTarget.id}
+          documentTitle={shareTarget.title}
+          onClose={() => setShareTarget(null)}
+        />
+      )}
+
+      {deleteTarget && (
+        <ConfirmDeleteModal
+          itemLabel={deleteTarget.title}
+          consequenceText="This document and its chunks will be permanently removed."
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleDelete}
+          isLoading={deleteMutation.isPending}
+        />
       )}
     </div>
   );

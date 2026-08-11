@@ -5,6 +5,7 @@ import { documentChunks, documents } from "@/db/schema";
 import { FileType } from "@/types/fileType";
 import { inngest } from "@/lib/inngest/client";
 import { supabase } from "@/lib/supabase";
+import { eq } from "drizzle-orm";
 
 export const maxDuration = 60;
 export const maxFileSize = 20; // MB
@@ -85,10 +86,23 @@ export async function POST(request: NextRequest) {
   });
 
   // send to inngest
-  await inngest.send({
-    name: "document/uploaded",
-    data: { documentId, documentPath: storagePath, fileType },
-  });
+  try {
+    await inngest.send({
+      name: "document/uploaded",
+      data: { documentId, documentPath: storagePath, fileType },
+    });
+  } catch {
+    await db
+      .update(documents)
+      .set({
+        status: "failed",
+        processingError: "Failed to queue document for processing",
+        updatedAt: new Date(),
+      })
+      .where(eq(documents.id, documentId));
+
+    return NextResponse.json({ documentId, status: "failed" });
+  }
 
   return NextResponse.json({ documentId, status: "pending" });
 }
