@@ -1,7 +1,7 @@
-import { db } from "@/db";
 import { documentChunks, documents } from "@/db/schema";
 import { documentAccessCondition } from "@/lib/documents/access";
 import { and, cosineDistance, desc, eq, sql } from "drizzle-orm";
+import { withUserContext } from "../db/withUserContext";
 
 export async function searchAccessibleChunks(
   queryEmbedding: number[],
@@ -13,19 +13,20 @@ export async function searchAccessibleChunks(
 
   const accessConditions = documentAccessCondition(userId, isAdmin);
 
-  const chunks = await db
-    .select({
-      id: documentChunks.id,
-      documentId: documentChunks.documentId,
-      title: documents.title,
-      content: documentChunks.content,
-      chunkIndex: documentChunks.chunkIndex,
-      similarity,
-    })
-    .from(documentChunks)
-    .innerJoin(documents, eq(documentChunks.documentId, documents.id))
-    .where(and(eq(documents.status, "ready"), accessConditions))
-    .orderBy(desc(similarity))
-    .limit(topK);
-  return chunks;
+  return withUserContext(userId, isAdmin, async (tx) => {
+    return tx
+      .select({
+        id: documentChunks.id,
+        documentId: documentChunks.documentId,
+        title: documents.title,
+        content: documentChunks.content,
+        chunkIndex: documentChunks.chunkIndex,
+        similarity,
+      })
+      .from(documentChunks)
+      .innerJoin(documents, eq(documentChunks.documentId, documents.id))
+      .where(and(eq(documents.status, "ready"), accessConditions))
+      .orderBy(desc(similarity))
+      .limit(topK);
+  });
 }
