@@ -122,8 +122,6 @@ export async function POST(request: NextRequest) {
           controller.enqueue(encoder.encode(event.delta.text));
         }
       }
-      controller.close();
-
       const citations = relevantChunks.map((chunk) => ({
         documentId: chunk.documentId,
         documentTitle: chunk.title,
@@ -140,6 +138,8 @@ export async function POST(request: NextRequest) {
         .update(conversations)
         .set({ updatedAt: new Date() })
         .where(eq(conversations.id, conversation.id));
+
+      controller.close();
     },
   });
 
