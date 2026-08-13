@@ -1,0 +1,603 @@
+{
+  "generatedAt": "2026-08-12T11:54:46.289Z",
+  "topK": 20,
+  "overall": {
+    "n": 60,
+    "recall": {
+      "@1": 0.85,
+      "@3": 1,
+      "@5": 1,
+      "@10": 1
+    },
+    "mrr": 0.9166666666666666,
+    "ndcg10": 0.9380929753571458
+  },
+  "byCategory": {
+    "direct": {
+      "n": 29,
+      "recall": {
+        "@1": 0.896551724137931,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 0.9482758620689655,
+      "ndcg10": 0.9618203193349784
+    },
+    "paraphrase": {
+      "n": 13,
+      "recall": {
+        "@1": 0.8461538461538461,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 0.9102564102564104,
+      "ndcg10": 0.9331484425824198
+    },
+    "disambiguation": {
+      "n": 13,
+      "recall": {
+        "@1": 0.6923076923076923,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 0.8205128205128205,
+      "ndcg10": 0.8662968851648396
+    },
+    "trap": {
+      "n": 5,
+      "recall": {
+        "@1": 1,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 1,
+      "ndcg10": 1
+    }
+  },
+  "perQuestion": [
+    {
+      "id": "q001",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q002",
+      "category": "direct",
+      "question": "How many employees did Aurora Robotics have at the end of 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q003",
+      "category": "paraphrase",
+      "question": "How much profit did Aurora Robotics make in 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q004",
+      "category": "disambiguation",
+      "question": "According to the 2021 annual report, what did Aurora Robotics expect for 2022?",
+      "rank": 3,
+      "ndcg10": 0.5,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q005",
+      "category": "direct",
+      "question": "Where is Aurora Robotics headquartered?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q006",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2022?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q007",
+      "category": "disambiguation",
+      "question": "By what percentage did Aurora Robotics' revenue grow in fiscal year 2022 compared to the prior year?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q008",
+      "category": "direct",
+      "question": "What company did Aurora Robotics acquire in 2022, and what technology did it bring in-house?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q009",
+      "category": "paraphrase",
+      "question": "When did Aurora Robotics open its Austin, Texas office?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q010",
+      "category": "disambiguation",
+      "question": "According to the 2022 annual report, what did Aurora Robotics expect for 2023?",
+      "rank": 3,
+      "ndcg10": 0.5,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q011",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q012",
+      "category": "trap",
+      "question": "Did Aurora Robotics report a net profit or a net loss in fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q013",
+      "category": "direct",
+      "question": "Who became CEO of Aurora Robotics in 2023, and who did they succeed?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q014",
+      "category": "paraphrase",
+      "question": "How many operational incidents affected Aurora Robotics in 2023 according to the annual report?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q015",
+      "category": "disambiguation",
+      "question": "According to the 2023 annual report, what is Aurora Robotics' outlook for 2024?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q016",
+      "category": "direct",
+      "question": "How many days of paid time off did the original Aurora Robotics employee handbook grant per year?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q017",
+      "category": "disambiguation",
+      "question": "Under the handbook effective January 2022, how many remote work days per week were employees allowed?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q018",
+      "category": "direct",
+      "question": "How many weeks of paid parental leave did Aurora Robotics offer under the original handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q019",
+      "category": "paraphrase",
+      "question": "How long did employees have to file expense reports under the original handbook?",
+      "rank": 3,
+      "ndcg10": 0.5,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q020",
+      "category": "direct",
+      "question": "What was Aurora Robotics' dress code under the version 1 handbook?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q021",
+      "category": "direct",
+      "question": "How many days of PTO do Aurora Robotics employees accrue per year under the current handbook?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q022",
+      "category": "disambiguation",
+      "question": "Is remote work still capped at 2 days per week under the 2024 handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q023",
+      "category": "direct",
+      "question": "How many weeks of paid parental leave does the 2024 handbook offer?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q024",
+      "category": "paraphrase",
+      "question": "What is Aurora Robotics' current sick leave policy?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q025",
+      "category": "direct",
+      "question": "What is the amount of Aurora Robotics' quarterly wellness stipend?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q026",
+      "category": "direct",
+      "question": "What is the maximum flight time of the Falcon Drone v1?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q027",
+      "category": "disambiguation",
+      "question": "What is the maximum payload capacity of the original Falcon Drone?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q028",
+      "category": "paraphrase",
+      "question": "How long does it take to recharge the Falcon Drone v1's battery?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q029",
+      "category": "direct",
+      "question": "What optional sensor add-on does the Falcon Drone v1 support for heat signature detection?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q030",
+      "category": "direct",
+      "question": "What is the maximum flight time of the Falcon Drone v2?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q031",
+      "category": "disambiguation",
+      "question": "What is the maximum payload capacity of the Falcon Drone v2?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q032",
+      "category": "direct",
+      "question": "What new autonomous capability did the Falcon Drone v2 introduce?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q033",
+      "category": "paraphrase",
+      "question": "According to the Falcon Drone v2 product spec, what changed about firmware update rollouts after the November 2023 incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q056",
+      "category": "disambiguation",
+      "question": "What camera resolution does the Falcon Drone v2 include?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q034",
+      "category": "direct",
+      "question": "What was the root cause of the March 14, 2023 dashboard outage?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q035",
+      "category": "direct",
+      "question": "How many customers were affected by the March 2023 outage?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q036",
+      "category": "paraphrase",
+      "question": "How long was Aurora Robotics' dashboard unavailable during the March 2023 incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q037",
+      "category": "direct",
+      "question": "What monitoring change did Aurora Robotics make after the March 2023 outage?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q038",
+      "category": "direct",
+      "question": "What was the root cause of the November 2023 Falcon Drone v2 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q039",
+      "category": "direct",
+      "question": "How many drones were affected by the November 2023 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q040",
+      "category": "trap",
+      "question": "What was the total remediation cost of the November 2023 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q041",
+      "category": "paraphrase",
+      "question": "What process change did Aurora Robotics introduce after the firmware incident to prevent recurrence?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q042",
+      "category": "direct",
+      "question": "What is the annual fee for Aurora Robotics' CloudScale hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q043",
+      "category": "direct",
+      "question": "What uptime does CloudScale Hosting guarantee to Aurora Robotics?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q044",
+      "category": "paraphrase",
+      "question": "How much advance notice is needed to terminate the CloudScale hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q045",
+      "category": "trap",
+      "question": "How many days' written notice are required to terminate Aurora Robotics' cloud hosting contract?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q060",
+      "category": "trap",
+      "question": "How much does Aurora Robotics pay per quarter under its cloud hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q046",
+      "category": "direct",
+      "question": "What is the annual fee for the DataStream Analytics agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q047",
+      "category": "direct",
+      "question": "What uptime does DataStream Analytics guarantee for the data ingestion pipeline?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q048",
+      "category": "paraphrase",
+      "question": "How long is telemetry data retained under the DataStream agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q049",
+      "category": "disambiguation",
+      "question": "Which of Aurora Robotics' vendor agreements was signed in June 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q058",
+      "category": "trap",
+      "question": "Which Aurora Robotics vendor agreement covers storage of LIDAR point cloud data?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q050",
+      "category": "direct",
+      "question": "How many approvals are required before a code change can be merged at Aurora Robotics?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q051",
+      "category": "direct",
+      "question": "What internal CLI tool do Aurora Robotics engineers use for local development tasks?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q052",
+      "category": "paraphrase",
+      "question": "When do new engineers at Aurora Robotics join the on-call rotation?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q053",
+      "category": "paraphrase",
+      "question": "What support is a new Aurora Robotics engineer given for their first 90 days?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 1
+    },
+    {
+      "id": "q054",
+      "category": "direct",
+      "question": "What tool does Aurora Robotics use for on-call alerting and incident management?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q055",
+      "category": "disambiguation",
+      "question": "What was Aurora Robotics' net income specifically in fiscal year 2022?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q057",
+      "category": "disambiguation",
+      "question": "What camera resolution does the original Falcon Drone (v1) include?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0
+    },
+    {
+      "id": "q059",
+      "category": "disambiguation",
+      "question": "How many employees did Aurora Robotics have at the end of fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0
+    }
+  ]
+}
