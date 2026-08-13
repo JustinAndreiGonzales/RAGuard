@@ -16,7 +16,8 @@ export async function rerankedSearch(
     isAdmin,
     candidatePoolSize,
   );
-  if (candidates.length === 0) return candidates;
+  if (candidates.length === 0)
+    return candidates.map((c) => ({ ...c, relevanceScore: undefined as number | undefined }));
 
   try {
     const ranked = await rerankChunks(
@@ -24,10 +25,12 @@ export async function rerankedSearch(
       candidates.map((c) => c.content),
       finalCount,
     );
-    return ranked.map((r) => candidates[r.index]);
+    return ranked.map((r) => ({ ...candidates[r.index], relevanceScore: r.relevanceScore }));
   } catch (err) {
     if (!fallbackOnError) throw err;
     console.error("Rerank failed, falling back to vector-ranked order:", err);
-    return candidates.slice(0, finalCount);
+    return candidates
+      .slice(0, finalCount)
+      .map((c) => ({ ...c, relevanceScore: undefined as number | undefined }));
   }
 }

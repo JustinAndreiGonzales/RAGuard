@@ -3,16 +3,25 @@ import { users } from "@/db/schema";
 import { embedTexts } from "@/lib/documents/embed";
 import { rerankedSearch } from "@/lib/retrieval/rerankedSearch";
 import { searchAccessibleChunks } from "@/lib/retrieval/searchAccessibleChunks";
+import {
+  DEFAULT_MAX_K,
+  DEFAULT_RELEVANCE_THRESHOLD,
+  selectByThreshold,
+} from "@/lib/retrieval/selectByThreshold";
 import { eq } from "drizzle-orm";
 import ExcelJS from "exceljs";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import path from "path";
 
+interface ExpectedChunk {
+  documentTitle: string;
+  chunkIndex: number;
+}
+
 interface GoldenEntry {
   id: string;
   question: string;
-  documentTitle: string;
-  expectedChunkIndexes: number[];
+  expectedChunks: ExpectedChunk[];
   category: string;
   expectedAnswer: string;
 }
@@ -20,6 +29,7 @@ interface GoldenEntry {
 interface RankedResult {
   title: string;
   chunkIndex: number;
+  relevanceScore?: number;
 }
 
 interface Metrics {
@@ -29,9 +39,16 @@ interface Metrics {
   ndcg10: number;
 }
 
+interface WindowMetrics {
+  multiChunkCoverage: number | null;
+  unanswerableSuppressionRate: number | null;
+  avgChunkCount: number;
+}
+
 const TOP_K = 20;
 const RECALL_KS = [1, 3, 5, 10];
 const NDCG_K = 10;
+const UNANSWERABLE_CATEGORY = "unanswerable";
 
 const LOG_HEADERS = [
   "Date",
@@ -49,6 +66,9 @@ const LOG_HEADERS = [
   "Report File",
   "Notes",
   "Reranked",
+  "Multi-chunk Coverage",
+  "Unanswerable Suppression Rate",
+  "Avg Chunk Count",
 ];
 
 function getNoteArg(): string {
@@ -88,9 +108,8 @@ async function appendToExcelLog(rowValues: (string | number)[], logPath: string)
 }
 
 function isMatch(entry: GoldenEntry, result: RankedResult): boolean {
-  return (
-    result.title === entry.documentTitle &&
-    entry.expectedChunkIndexes.includes(result.chunkIndex)
+  return entry.expectedChunks.some(
+    (ec) => ec.documentTitle === result.title && ec.chunkIndex === result.chunkIndex,
   );
 }
 
@@ -112,12 +131,48 @@ function mrr(ranks: (number | null)[]): number {
 function ndcgAtK(entry: GoldenEntry, results: RankedResult[], k: number): number {
   const relevance: number[] = results.slice(0, k).map((r) => (isMatch(entry, r) ? 1 : 0));
   const dcg = relevance.reduce((sum, rel, i) => sum + rel / Math.log2(i + 2), 0);
-  const idealHits = Math.min(entry.expectedChunkIndexes.length, k);
+  const idealHits = Math.min(entry.expectedChunks.length, k);
   const idcg = Array.from({ length: idealHits }, (_, i) => 1 / Math.log2(i + 2)).reduce(
     (a, b) => a + b,
     0,
   );
   return idcg === 0 ? 0 : dcg / idcg;
+}
+
+function multiChunkCoverage(entry: GoldenEntry, window: RankedResult[]): boolean {
+  return entry.expectedChunks.every((ec) =>
+    window.some((r) => r.title === ec.documentTitle && r.chunkIndex === ec.chunkIndex),
+  );
+}
+
+function computeWindowMetrics(
+  perQuestion: { category: string; windowSize: number; multiChunkCovered?: boolean }[],
+): WindowMetrics {
+  const multiChunkRows = perQuestion.filter((q) => q.category === "multi-chunk");
+  const unanswerableRows = perQuestion.filter((q) => q.category === UNANSWERABLE_CATEGORY);
+
+  return {
+    multiChunkCoverage:
+      multiChunkRows.length === 0
+        ? null
+        : multiChunkRows.filter((q) => q.multiChunkCovered).length / multiChunkRows.length,
+    unanswerableSuppressionRate:
+      unanswerableRows.length === 0
+        ? null
+        : unanswerableRows.filter((q) => q.windowSize === 0).length / unanswerableRows.length,
+    avgChunkCount:
+      perQuestion.reduce((sum, q) => sum + q.windowSize, 0) / perQuestion.length,
+  };
+}
+
+function printWindowMetrics(m: WindowMetrics) {
+  console.log(
+    `  Multi-chunk Coverage: ${m.multiChunkCoverage === null ? "n/a" : (m.multiChunkCoverage * 100).toFixed(1) + "%"}`,
+  );
+  console.log(
+    `  Unanswerable Suppression Rate: ${m.unanswerableSuppressionRate === null ? "n/a" : (m.unanswerableSuppressionRate * 100).toFixed(1) + "%"}`,
+  );
+  console.log(`  Avg Chunk Count: ${m.avgChunkCount.toFixed(2)}`);
 }
 
 function computeMetrics(ranks: (number | null)[], ndcgValues: number[]): Metrics {
@@ -177,7 +232,11 @@ async function main() {
         TOP_K,
         { fallbackOnError: false },
       );
-      ranked = results.map((r) => ({ title: r.title, chunkIndex: r.chunkIndex }));
+      ranked = results.map((r) => ({
+        title: r.title,
+        chunkIndex: r.chunkIndex,
+        relevanceScore: r.relevanceScore,
+      }));
     } else {
       const results = await searchAccessibleChunks(embeddings[i], admin.id, true, TOP_K);
       ranked = results.map((r) => ({ title: r.title, chunkIndex: r.chunkIndex }));
@@ -185,6 +244,14 @@ async function main() {
     const rank = findRank(entry, ranked);
     const ndcg10 = ndcgAtK(entry, ranked, NDCG_K);
     const matched = rank ? ranked[rank - 1] : undefined;
+
+    // "Today's production window" — production selects a variable-length window via
+    // selectByThreshold (relevance-score cutoff + max-k cap), not a fixed slice. Computed
+    // from the same full-depth list already fetched above, so this costs no extra API calls.
+    const window = selectByThreshold(ranked, DEFAULT_RELEVANCE_THRESHOLD, DEFAULT_MAX_K);
+    const multiChunkCovered =
+      entry.category === "multi-chunk" ? multiChunkCoverage(entry, window) : undefined;
+
     perQuestion.push({
       id: entry.id,
       category: entry.category,
@@ -193,33 +260,48 @@ async function main() {
       ndcg10,
       matchedTitle: matched?.title ?? null,
       matchedChunkIndex: matched?.chunkIndex ?? null,
+      top1RelevanceScore: ranked[0]?.relevanceScore ?? null,
+      isTop1Match: rank === 1,
+      windowSize: window.length,
+      windowRelevanceScores: window.map((r) => r.relevanceScore ?? null),
+      multiChunkCovered,
     });
   }
 
+  const scoredQuestions = perQuestion.filter((q) => q.category !== UNANSWERABLE_CATEGORY);
   const overall = computeMetrics(
-    perQuestion.map((q) => q.rank),
-    perQuestion.map((q) => q.ndcg10),
+    scoredQuestions.map((q) => q.rank),
+    scoredQuestions.map((q) => q.ndcg10),
   );
+  const overallWindow = computeWindowMetrics(perQuestion);
 
   const categories = [...new Set(goldenSet.map((g) => g.category))];
   const byCategory: Record<string, Metrics> = {};
+  const byCategoryWindow: Record<string, WindowMetrics> = {};
   for (const cat of categories) {
     const subset = perQuestion.filter((q) => q.category === cat);
     byCategory[cat] = computeMetrics(
       subset.map((q) => q.rank),
       subset.map((q) => q.ndcg10),
     );
+    byCategoryWindow[cat] = computeWindowMetrics(subset);
   }
 
-  console.log("=== Overall ===");
+  console.log(
+    `=== Overall (n=${overall.n}, excludes ${perQuestion.length - scoredQuestions.length} unanswerable question(s) from Recall/MRR/nDCG) ===`,
+  );
   printMetrics(overall);
+  printWindowMetrics(overallWindow);
   console.log("\n=== By category ===");
   for (const cat of categories) {
     console.log(`\n-- ${cat} (n=${byCategory[cat].n}) --`);
     printMetrics(byCategory[cat]);
+    printWindowMetrics(byCategoryWindow[cat]);
   }
 
-  const misses = perQuestion.filter((q) => q.rank === null);
+  // Unanswerable questions are supposed to have no match in top TOP_K — that's the
+  // correct outcome, not a miss. Only flag misses among questions expected to have one.
+  const misses = scoredQuestions.filter((q) => q.rank === null);
   if (misses.length > 0) {
     console.log(`\n${misses.length} question(s) had no match in top ${TOP_K}:`);
     misses.forEach((m) => console.log(`  ${m.id} [${m.category}]: ${m.question}`));
@@ -235,8 +317,12 @@ async function main() {
       {
         generatedAt: new Date().toISOString(),
         topK: TOP_K,
+        productionRelevanceThreshold: DEFAULT_RELEVANCE_THRESHOLD,
+        productionMaxK: DEFAULT_MAX_K,
         overall,
+        overallWindow,
         byCategory,
+        byCategoryWindow,
         perQuestion,
       },
       null,
@@ -265,6 +351,11 @@ async function main() {
       reportRelPath,
       note,
       useRerank ? "Y" : "N",
+      overallWindow.multiChunkCoverage === null ? "" : round(overallWindow.multiChunkCoverage),
+      overallWindow.unanswerableSuppressionRate === null
+        ? ""
+        : round(overallWindow.unanswerableSuppressionRate),
+      round(overallWindow.avgChunkCount),
     ],
     logPath,
   );

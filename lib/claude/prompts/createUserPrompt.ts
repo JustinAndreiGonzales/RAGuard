@@ -1,8 +1,12 @@
 import { embedTexts } from "@/lib/documents/embed";
 import { rerankedSearch } from "@/lib/retrieval/rerankedSearch";
+import {
+  DEFAULT_MAX_K,
+  DEFAULT_RELEVANCE_THRESHOLD,
+  selectByThreshold,
+} from "@/lib/retrieval/selectByThreshold";
 
 const CANDIDATE_POOL_SIZE = 20;
-const FINAL_CHUNK_COUNT = 5;
 
 export async function createUserPrompt(
   userInput: string,
@@ -11,13 +15,19 @@ export async function createUserPrompt(
 ) {
   const [embeddedQuery] = await embedTexts([userInput], "query");
 
-  const relevantChunks = await rerankedSearch(
+  const rerankedResults = await rerankedSearch(
     userInput,
     embeddedQuery,
     userId,
     isAdmin,
     CANDIDATE_POOL_SIZE,
-    FINAL_CHUNK_COUNT,
+    CANDIDATE_POOL_SIZE,
+  );
+
+  const relevantChunks = selectByThreshold(
+    rerankedResults,
+    DEFAULT_RELEVANCE_THRESHOLD,
+    DEFAULT_MAX_K,
   );
 
   if (relevantChunks.length === 0) return null;
