@@ -450,18 +450,19 @@ async function runDecompositionCoverage(
     const subQueriesTriggered = Array.isArray(plan.subQueries);
     const expectedDocumentTitles = [...new Set(entry.expectedChunks.map((ec) => ec.documentTitle))];
 
-    let retrievedDocumentTitles: string[] = [];
-    let allExpectedDocumentsRetrieved = false;
-
-    if (subQueriesTriggered) {
-      const queries = plan.subQueries!;
-      const promptResult = await createUserPrompt(queries, plan.selfContainedQuestion, adminId, true);
-      const retrievedChunks = promptResult.status === "ok" ? promptResult.chunks : [];
-      retrievedDocumentTitles = [...new Set(retrievedChunks.map((c) => c.title))];
-      allExpectedDocumentsRetrieved = expectedDocumentTitles.every((title) =>
-        retrievedDocumentTitles.includes(title),
-      );
-    }
+    // Always run retrieval, whether or not decomposition triggered — a single
+    // (non-decomposed) query can still legitimately retrieve every expected document on its
+    // own, and this check exists to confirm what production actually does end to end, not
+    // just to confirm decomposition happened. Previously this only ran retrieval inside the
+    // `if (subQueriesTriggered)` branch, which silently reported 0 retrieved docs for every
+    // non-decomposed question regardless of whether retrieval actually succeeded.
+    const queries = plan.subQueries ?? [plan.selfContainedQuestion];
+    const promptResult = await createUserPrompt(queries, plan.selfContainedQuestion, adminId, true);
+    const retrievedChunks = promptResult.status === "ok" ? promptResult.chunks : [];
+    const retrievedDocumentTitles = [...new Set(retrievedChunks.map((c) => c.title))];
+    const allExpectedDocumentsRetrieved = expectedDocumentTitles.every((title) =>
+      retrievedDocumentTitles.includes(title),
+    );
 
     records.push({
       id: entry.id,
