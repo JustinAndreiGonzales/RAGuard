@@ -104,14 +104,16 @@ const TeamDetailPage = () => {
 
   return (
     <div className="p-xl flex flex-col gap-lg">
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="sm"
+        icon="leading"
+        iconElement={<ArrowLeft className="h-md w-md" />}
         onClick={() => router.push("/teams")}
-        className="inline-flex items-center gap-xs type-body-sm text-secondary hover:text-primary w-fit"
+        className="w-fit"
       >
-        <ArrowLeft className="h-md w-md" />
         Back to teams
-      </button>
+      </Button>
 
       <div className="flex items-center justify-between">
         <h1 className="type-h1 text-primary truncate">{team.name}</h1>

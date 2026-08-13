@@ -16,7 +16,6 @@ export interface TableProps<T> {
 }
 
 type TableRowProps<T> = {
-  isSelected?: boolean;
   row: T;
   columns: Column<T>[];
   onRowClick?: (row: T) => void;
@@ -57,7 +56,6 @@ const Table = <T,>({ columns, data, keyField, onRowClick }: TableProps<T>) => {
 };
 
 const TableRow = <T,>({
-  isSelected = false,
   row,
   columns,
   onRowClick,
@@ -69,7 +67,6 @@ const TableRow = <T,>({
         "border-b border-b-line-subtle last:border-b-0",
         onRowClick && "cursor-pointer",
         "transition-colors hover:bg-canvas hover:shadow-sm",
-        isSelected && "bg-accent-subtle-bg",
       )}
     >
       {columns.map((col) => {

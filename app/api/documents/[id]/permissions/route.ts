@@ -1,7 +1,10 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
-import { documentPermissions, documents, teams, users } from "@/db/schema";
-import { and, eq, inArray } from "drizzle-orm";
+import { documentPermissions, teams, users } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
+import { requireDocumentOwnerOrAdmin } from "@/lib/documents/access";
+import { insertHandlingConflict } from "@/lib/http/insertHandlingConflict";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
+import { eq, inArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
@@ -9,22 +12,17 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
-  if (session.user.role !== "admin") {
-    const document = await db
-      .select({ id: documents.id })
-      .from(documents)
-      .where(and(eq(documents.id, id), eq(documents.ownerId, session.user.id)))
-      .limit(1);
-
-    if (document.length === 0)
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const forbidden = await requireDocumentOwnerOrAdmin(
+    id,
+    session.user.id,
+    session.user.role === "admin",
+  );
+  if (forbidden) return forbidden;
 
   const permissions = await db
     .select({
@@ -78,37 +76,22 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 
-  if (session.user.role !== "admin") {
-    const document = await db
-      .select({ id: documents.id })
-      .from(documents)
-      .where(and(eq(documents.id, id), eq(documents.ownerId, session.user.id)))
-      .limit(1);
+  const forbidden = await requireDocumentOwnerOrAdmin(
+    id,
+    session.user.id,
+    session.user.role === "admin",
+  );
+  if (forbidden) return forbidden;
 
-    if (document.length === 0)
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const parsed = await parseJsonBody(request, postBodySchema);
+  if (parsed instanceof NextResponse) return parsed;
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const parsed = postBodySchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json(
-      { error: "Invalid Request Body", details: z.treeifyError(parsed.error) },
-      { status: 400 },
-    );
-
-  const { principalType, principalId } = parsed.data;
+  const { principalType, principalId } = parsed;
 
   if (principalType === "team") {
     const team = await db
@@ -134,7 +117,7 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  try {
+  return insertHandlingConflict(async () => {
     const [newPermission] = await db
       .insert(documentPermissions)
       .values({
@@ -144,17 +127,6 @@ export async function POST(
         grantedBy: session.user.id,
       })
       .returning();
-    return NextResponse.json(newPermission, { status: 201 });
-  } catch (err: any) {
-    if (err.code === "23505" /* Postgres unique_violation */) {
-      return NextResponse.json(
-        { error: "Permission already exists for this principal" },
-        { status: 409 },
-      );
-    }
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
-  }
+    return newPermission;
+  }, "Permission already exists for this principal");
 }

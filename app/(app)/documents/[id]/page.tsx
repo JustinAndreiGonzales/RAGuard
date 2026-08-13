@@ -79,14 +79,16 @@ const DocumentDetailPage = () => {
 
   return (
     <div className="p-2xl flex flex-col gap-lg">
-      <button
-        type="button"
+      <Button
+        variant="ghost"
+        size="sm"
+        icon="leading"
+        iconElement={<ArrowLeft className="h-md w-md" />}
         onClick={() => router.push("/documents")}
-        className="inline-flex items-center gap-xs type-body-sm text-secondary hover:text-primary w-fit"
+        className="w-fit"
       >
-        <ArrowLeft className="h-md w-md" />
         Back to documents
-      </button>
+      </Button>
 
       {data.status === "failed" && data.processingError && (
         <div className="p-md rounded-md bg-status-failed-bg text-status-failed-fg type-body-sm">

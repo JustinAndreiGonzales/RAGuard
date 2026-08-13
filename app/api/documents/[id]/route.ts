@@ -1,27 +1,20 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { documentChunks, documents, users } from "@/db/schema";
-import { checkDocumentAccess } from "@/lib/documents/access";
+import { requireSession } from "@/lib/auth/guard";
+import { documentAccessCondition } from "@/lib/documents/access";
 import { supabase } from "@/lib/supabase";
-import { count, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
   const isAdmin = session.user.role === "admin";
-
-  const access = await checkDocumentAccess(id, session.user.id, isAdmin);
-  if (access === "not_found")
-    return NextResponse.json({ error: "Document not found" }, { status: 404 });
-  if (access === "forbidden")
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const [document] = await db
     .select({
@@ -40,8 +33,21 @@ export async function GET(
     })
     .from(documents)
     .innerJoin(users, eq(documents.ownerId, users.id))
-    .where(eq(documents.id, id))
+    .where(and(eq(documents.id, id), documentAccessCondition(session.user.id, isAdmin)))
     .limit(1);
+
+  if (!document) {
+    const [exists] = await db
+      .select({ id: documents.id })
+      .from(documents)
+      .where(eq(documents.id, id))
+      .limit(1);
+
+    return NextResponse.json(
+      { error: exists ? "Forbidden" : "Document not found" },
+      { status: exists ? 403 : 404 },
+    );
+  }
 
   const [{ chunkCount }] = await db
     .select({ chunkCount: count() })
@@ -61,9 +67,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 

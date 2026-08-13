@@ -1,6 +1,5 @@
 "use client";
 
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { UserSummary } from "@/lib/api/types";
 import { getInitials } from "@/lib/format";
@@ -9,6 +8,7 @@ import { useUserByEmailQuery } from "@/lib/hooks/useUsers";
 import Avatar from "../simple/Avatar";
 import Input from "../simple/Input";
 import Modal from "../simple/Modal";
+import Pill from "../simple/Pill";
 import { useToast } from "../providers/ToastProvider";
 
 type AddMemberModalProps = {
@@ -111,20 +111,13 @@ const AddMemberModal = ({ teamId, onClose }: AddMemberModalProps) => {
         {pendingMembers.length > 0 && (
           <div className="flex flex-wrap gap-xs">
             {pendingMembers.map((m) => (
-              <span
+              <Pill
                 key={m.id}
-                className="inline-flex items-center gap-xs h-[28px] pl-sm pr-xs rounded-full bg-canvas border border-line-subtle type-body-sm text-primary"
+                onRemove={() => removeFromStaging(m.id)}
+                removeLabel={`Remove ${m.name ?? "member"}`}
               >
                 {m.name ?? "Unknown"}
-                <button
-                  type="button"
-                  onClick={() => removeFromStaging(m.id)}
-                  aria-label={`Remove ${m.name ?? "member"}`}
-                  className="text-tertiary hover:text-primary"
-                >
-                  <X className="h-[14px] w-[14px]" />
-                </button>
-              </span>
+              </Pill>
             ))}
           </div>
         )}

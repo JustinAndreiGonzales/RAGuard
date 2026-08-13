@@ -1,8 +1,8 @@
-import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { documentChunks, documents } from "@/db/schema";
 import { FileType } from "@/types/fileType";
+import { requireSession } from "@/lib/auth/guard";
 import { inngest } from "@/lib/inngest/client";
 import { supabase } from "@/lib/supabase";
 import { eq } from "drizzle-orm";
@@ -20,10 +20,8 @@ export const mimeTypeToFileType = new Map<string, FileType>([
 ]);
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   // Step 1: Validate Input
   const formData = await request.formData();

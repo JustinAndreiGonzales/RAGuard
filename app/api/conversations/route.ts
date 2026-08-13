@@ -1,14 +1,13 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { conversations } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
 import { desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const rows = await db
     .select({
@@ -29,9 +28,8 @@ const postBodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   let body: unknown = {};
   const rawBody = await request.text();

@@ -1,6 +1,8 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { teamMembers, teams, users } from "@/db/schema";
+import { requireAdmin, requireSession } from "@/lib/auth/guard";
+import { insertHandlingConflict } from "@/lib/http/insertHandlingConflict";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
@@ -13,29 +15,17 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
-  if (session.user.role !== "admin")
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
+  const forbidden = requireAdmin(session);
+  if (forbidden) return forbidden;
 
   const { id } = await params;
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody(request, postBodySchema);
+  if (parsed instanceof NextResponse) return parsed;
 
-  const parsed = postBodySchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json(
-      { error: "Invalid Request Body", details: z.treeifyError(parsed.error) },
-      { status: 400 },
-    );
-
-  const { userId } = parsed.data;
+  const { userId } = parsed;
 
   const team = await db
     .select({ id: teams.id })
@@ -55,25 +45,8 @@ export async function POST(
   if (user.length === 0)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  try {
-    const member = await db
-      .insert(teamMembers)
-      .values({
-        teamId: id,
-        userId,
-      })
-      .returning();
-    return NextResponse.json(member, { status: 201 });
-  } catch (err: any) {
-    if (err.code === "23505" /* Postgres unique_violation */) {
-      return NextResponse.json(
-        { error: "Member already in team" },
-        { status: 409 },
-      );
-    }
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
-  }
+  return insertHandlingConflict(
+    () => db.insert(teamMembers).values({ teamId: id, userId }).returning(),
+    "Member already in team",
+  );
 }

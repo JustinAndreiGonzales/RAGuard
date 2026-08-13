@@ -1,13 +1,12 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { teamMembers, teams } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const memberTeams = await db
     .select({ id: teams.id, name: teams.name })

@@ -1,6 +1,7 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { requireAdmin, requireSession } from "@/lib/auth/guard";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
@@ -13,11 +14,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (session.user.role !== "admin")
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
+  const forbidden = requireAdmin(session);
+  if (forbidden) return forbidden;
 
   const { id } = await params;
 
@@ -35,22 +35,12 @@ export async function PATCH(
     );
   }
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-  const parsedBody = patchBodySchema.safeParse(body);
-  if (!parsedBody.success)
-    return NextResponse.json(
-      { error: "Invalid Request Body", details: z.treeifyError(parsedBody.error) },
-      { status: 400 },
-    );
+  const parsedBody = await parseJsonBody(request, patchBodySchema);
+  if (parsedBody instanceof NextResponse) return parsedBody;
 
   const [user] = await db
     .update(users)
-    .set({ role: parsedBody.data.role })
+    .set({ role: parsedBody.role })
     .where(eq(users.id, id))
     .returning({ id: users.id, role: users.role });
 

@@ -10,17 +10,14 @@ import Button from "@/components/simple/Button";
 import EmptyState from "@/components/simple/EmptyState";
 import Input from "@/components/simple/Input";
 import Modal from "@/components/simple/Modal";
+import Pill from "@/components/simple/Pill";
 import Table, { Column } from "@/components/simple/Table";
 import { getErrorMessage } from "@/lib/api/errors";
 import type { Role, UserListItem } from "@/lib/api/types";
 import { getInitials } from "@/lib/format";
 import { useUpdateUserRoleMutation, useUsersQuery } from "@/lib/hooks/useUsers";
 
-const RoleBadge = ({ role }: { role: Role }) => (
-  <span className="inline-flex items-center h-[20px] px-xs rounded-full bg-canvas border border-line-subtle type-mono-label text-secondary uppercase">
-    {role}
-  </span>
-);
+const RoleBadge = ({ role }: { role: Role }) => <Pill size="sm">{role}</Pill>;
 
 const UsersAdminPage = () => {
   const router = useRouter();

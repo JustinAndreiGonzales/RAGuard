@@ -1,3 +1,5 @@
+import { voyageFetch } from "./voyageClient";
+
 interface EmbeddingResponse {
   object: string;
   data: { object: string; index: number; embedding: number[] }[];
@@ -55,23 +57,16 @@ async function embed(
   texts: string[],
   inputType: "document" | "query",
 ): Promise<number[][]> {
-  const res = await fetch("https://api.voyageai.com/v1/embeddings", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.VOYAGE_API_KEY!}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const data = await voyageFetch<EmbeddingResponse>(
+    "/embeddings",
+    {
       input: texts,
       model: "voyage-4-lite",
       input_type: inputType,
       output_dimension: 1024,
-    }),
-  });
+    },
+    "Voyage API error",
+  );
 
-  if (!res.ok)
-    throw new Error(`Voyage API error: ${res.status} ${await res.text()}`);
-
-  const data: EmbeddingResponse = await res.json();
   return data.data.sort((a, b) => a.index - b.index).map((d) => d.embedding);
 }

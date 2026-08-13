@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,21 +13,10 @@ const signUpSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody(request, signUpSchema);
+  if (parsed instanceof NextResponse) return parsed;
 
-  const parsed = signUpSchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json(
-      { error: "Invalid Request Body", details: z.treeifyError(parsed.error) },
-      { status: 400 },
-    );
-
-  const { email, password, name } = parsed.data;
+  const { email, password, name } = parsed;
 
   try {
     const existing = await db.query.users.findFirst({

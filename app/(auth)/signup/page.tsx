@@ -5,17 +5,18 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "@/components/providers/ToastProvider";
 import Button from "@/components/simple/Button";
 import Input from "@/components/simple/Input";
 import { getErrorMessage } from "@/lib/api/errors";
 import { useRegisterMutation } from "@/lib/hooks/useAuth";
 
 export default function SignupPage() {
-  const [error, setError] = useState<string | null>(null);
   const [confirmError, setConfirmError] = useState<string | null>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
   const registerMutation = useRegisterMutation();
+  const { showToast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,7 +26,6 @@ export default function SignupPage() {
     const password = String(formData.get("password") ?? "");
     const confirmPassword = String(formData.get("confirmPassword") ?? "");
 
-    setError(null);
     setConfirmError(null);
 
     if (password !== confirmPassword) {
@@ -36,7 +36,7 @@ export default function SignupPage() {
     try {
       await registerMutation.mutateAsync({ email, password, name });
     } catch (err) {
-      setError(getErrorMessage(err));
+      showToast("error", getErrorMessage(err));
       return;
     }
 
@@ -47,7 +47,7 @@ export default function SignupPage() {
     });
 
     if (result?.error) {
-      setError("Account created — please log in.");
+      showToast("error", "Account created — please log in.");
       router.push("/login");
       return;
     }
@@ -80,11 +80,6 @@ export default function SignupPage() {
             errorText={confirmError ?? ""}
             required
           />
-          {error && (
-            <div className="p-sm rounded-md bg-status-failed-bg text-status-failed-fg type-body-sm">
-              {error}
-            </div>
-          )}
           <Button
             variant="primary"
             fullWidth

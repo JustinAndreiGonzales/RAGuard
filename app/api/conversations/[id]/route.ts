@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { conversations, messages } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
 import { and, asc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,9 +8,8 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { id } = await params;
 

@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { teamMembers } from "@/db/schema";
+import { requireAdmin, requireSession } from "@/lib/auth/guard";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,11 +8,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; userId: string }> },
 ) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
-  if (session.user.role !== "admin")
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
+  const forbidden = requireAdmin(session);
+  if (forbidden) return forbidden;
 
   const { id, userId } = await params;
 

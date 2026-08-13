@@ -6,6 +6,7 @@ import { useToast } from "@/components/providers/ToastProvider";
 import Avatar from "@/components/simple/Avatar";
 import Button from "@/components/simple/Button";
 import Input from "@/components/simple/Input";
+import Pill from "@/components/simple/Pill";
 import { getErrorMessage } from "@/lib/api/errors";
 import { getInitials } from "@/lib/format";
 import { useUpdatePasswordMutation } from "@/lib/hooks/useAccount";
@@ -25,12 +26,10 @@ const AccountPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmError, setConfirmError] = useState<string | null>(null);
-  const [serverError, setServerError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setConfirmError(null);
-    setServerError(null);
 
     if (newPassword !== confirmPassword) {
       setConfirmError("Passwords do not match");
@@ -47,7 +46,7 @@ const AccountPage = () => {
       setConfirmPassword("");
       showToast("success", "Password updated");
     } catch (err) {
-      setServerError(getErrorMessage(err));
+      showToast("error", getErrorMessage(err));
     }
   };
 
@@ -58,9 +57,7 @@ const AccountPage = () => {
           <Avatar size="lg" initials={getInitials(name)} />
           <p className="type-h3 text-primary">{name ?? "Unknown"}</p>
           <p className="type-body-sm text-tertiary">{email}</p>
-          <span className="h-[20px] inline-flex items-center px-xs rounded-full bg-canvas border border-line-subtle type-mono-label text-secondary uppercase">
-            {role}
-          </span>
+          <Pill size="sm">{role}</Pill>
         </div>
 
         <div className="flex flex-col gap-sm">
@@ -72,12 +69,7 @@ const AccountPage = () => {
           ) : (
             <div className="flex flex-wrap gap-xs">
               {meQuery.data!.teams.map((team) => (
-                <span
-                  key={team.id}
-                  className="h-[28px] inline-flex items-center px-sm rounded-full bg-canvas border border-line-subtle type-body-sm text-primary"
-                >
-                  {team.name}
-                </span>
+                <Pill key={team.id}>{team.name}</Pill>
               ))}
             </div>
           )}
@@ -111,11 +103,6 @@ const AccountPage = () => {
             errorText={confirmError ?? ""}
             required
           />
-          {serverError && (
-            <div className="p-sm rounded-md bg-status-failed-bg text-status-failed-fg type-body-sm">
-              {serverError}
-            </div>
-          )}
           <Button
             variant="primary"
             type="submit"

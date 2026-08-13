@@ -1,14 +1,15 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { teamMembers, teams } from "@/db/schema";
+import { requireAdmin, requireSession } from "@/lib/auth/guard";
+import { insertHandlingConflict } from "@/lib/http/insertHandlingConflict";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
 import { count, eq, inArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
 export async function GET(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   if (session.user.role === "admin") {
     const availableTeams = await db
@@ -57,41 +58,18 @@ const postBodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
-  if (session.user.role !== "admin")
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
+  const forbidden = requireAdmin(session);
+  if (forbidden) return forbidden;
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody(request, postBodySchema);
+  if (parsed instanceof NextResponse) return parsed;
 
-  const parsed = postBodySchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json(
-      { error: "Invalid Request Body", details: z.treeifyError(parsed.error) },
-      { status: 400 },
-    );
+  const { name } = parsed;
 
-  const { name } = parsed.data;
-
-  try {
-    const team = await db.insert(teams).values({ name }).returning();
-    return NextResponse.json(team, { status: 201 });
-  } catch (err: any) {
-    if (err.code === "23505" /* Postgres unique_violation */) {
-      return NextResponse.json(
-        { error: "Team already exists" },
-        { status: 409 },
-      );
-    }
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 },
-    );
-  }
+  return insertHandlingConflict(
+    () => db.insert(teams).values({ name }).returning(),
+    "Team already exists",
+  );
 }

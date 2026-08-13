@@ -1,3 +1,5 @@
+import { voyageFetch } from "./voyageClient";
+
 interface RerankResponse {
   object: string;
   data: { index: number; relevance_score: number }[];
@@ -10,24 +12,17 @@ export async function rerankChunks(
   documents: string[],
   topK: number,
 ): Promise<{ index: number; relevanceScore: number }[]> {
-  const res = await fetch("https://api.voyageai.com/v1/rerank", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.VOYAGE_API_KEY!}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  const data = await voyageFetch<RerankResponse>(
+    "/rerank",
+    {
       query,
       documents,
       model: "rerank-2.5",
       top_k: topK,
-    }),
-  });
+    },
+    "Voyage rerank API error",
+  );
 
-  if (!res.ok)
-    throw new Error(`Voyage rerank API error: ${res.status} ${await res.text()}`);
-
-  const data: RerankResponse = await res.json();
   return data.data
     .map((r) => ({ index: r.index, relevanceScore: r.relevance_score }))
     .sort((a, b) => b.relevanceScore - a.relevanceScore);

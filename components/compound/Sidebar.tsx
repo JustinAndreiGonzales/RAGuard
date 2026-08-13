@@ -15,6 +15,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "../lib/utils";
 import Avatar from "../simple/Avatar";
 import NavItem from "../simple/NavItem";
+import Pill from "../simple/Pill";
 
 type NavKey = "chat" | "documents" | "teams" | "users";
 type Role = "admin" | "user";
@@ -167,14 +168,9 @@ const Sidebar = ({
                   {userEmail}
                 </p>
               </div>
-              <span
-                className={cn(
-                  "shrink-0 h-[20px] inline-flex items-center px-xs rounded-full",
-                  "bg-canvas border border-line-subtle type-mono-label text-secondary uppercase",
-                )}
-              >
+              <Pill size="sm" className="shrink-0">
                 {role}
-              </span>
+              </Pill>
               {/* <ChevronsUpDown className="h-[14px] w-[14px] shrink-0 text-tertiary" /> */}
             </>
           )}

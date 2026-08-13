@@ -1,6 +1,7 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
+import { parseJsonBody } from "@/lib/http/parseJsonBody";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,21 +13,15 @@ const patchBodySchema = z.object({
 });
 
 export async function PATCH(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
-
-  const parsed = patchBodySchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json({ error: "Invalid password" }, { status: 400 });
-  const { password, newPassword } = parsed.data;
+  const parsed = await parseJsonBody(request, patchBodySchema, {
+    invalidBodyResponse: () =>
+      NextResponse.json({ error: "Invalid password" }, { status: 400 }),
+  });
+  if (parsed instanceof NextResponse) return parsed;
+  const { password, newPassword } = parsed;
 
   if (password === newPassword)
     return NextResponse.json(

@@ -5,19 +5,19 @@ import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useToast } from "@/components/providers/ToastProvider";
 import Button from "@/components/simple/Button";
 import Input from "@/components/simple/Input";
 
 export default function LoginPage() {
-  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { showToast } = useToast();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    setError(null);
     setIsSubmitting(true);
 
     const result = await signIn("credentials", {
@@ -29,7 +29,7 @@ export default function LoginPage() {
     setIsSubmitting(false);
 
     if (result?.error) {
-      setError("Invalid email or password");
+      showToast("error", "Invalid email or password");
       return;
     }
     // Prevent a previous session's cached data (documents, conversations, ...)
@@ -52,11 +52,6 @@ export default function LoginPage() {
             name="password"
             required
           />
-          {error && (
-            <div className="p-sm rounded-md bg-status-failed-bg text-status-failed-fg type-body-sm">
-              {error}
-            </div>
-          )}
           <Button
             variant="primary"
             fullWidth

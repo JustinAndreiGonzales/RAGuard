@@ -70,6 +70,8 @@ Radius `md`. Icon↔label gap `xs`. `disabled` = 40% opacity, pointer-events non
 
 ## Select
 
+> **Removed:** the `Select` component (`components/simple/Select.tsx`) was deleted as dead code (zero usages) during the Phase 1 cleanup. Section kept for historical reference only.
+
 Same prop shape as Input (`state`, `label`, `helperText`), plus:
 
 | Prop | Type | Values | Default |

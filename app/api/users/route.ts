@@ -1,21 +1,20 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { requireAdmin, requireSession } from "@/lib/auth/guard";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const searchParams = request.nextUrl.searchParams;
   const email = searchParams.get("email");
 
   if (!email) {
     // No email filter: admin-only "list all users" mode.
-    if (session.user.role !== "admin")
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    const forbidden = requireAdmin(session);
+    if (forbidden) return forbidden;
 
     const allUsers = await db
       .select({

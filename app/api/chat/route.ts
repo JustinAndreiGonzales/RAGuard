@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { conversations, messages } from "@/db/schema";
+import { requireSession } from "@/lib/auth/guard";
 import { client, model } from "@/lib/claude/client";
 import { createUserPrompt } from "@/lib/claude/prompts/createUserPrompt";
 import {
@@ -9,6 +9,7 @@ import {
   type QueryPlan,
 } from "@/lib/claude/prompts/queryPlanner";
 import { systemPrompt } from "@/lib/claude/prompts/systemPrompt";
+import { touchConversation } from "@/lib/db/queries/conversations";
 import { and, desc, eq, ne } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,9 +31,8 @@ function truncateTitle(text: string) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const { userInput, conversationId } = await request.json();
 
@@ -74,10 +74,7 @@ export async function POST(request: NextRequest) {
       content: userInput,
     })
     .returning();
-  await db
-    .update(conversations)
-    .set({ updatedAt: new Date() })
-    .where(eq(conversations.id, conversation.id));
+  await touchConversation(conversation.id);
 
   // Query planning: resolve conversational references in userInput into a self-contained
   // question, and decompose comparison-style questions into per-document sub-queries.
@@ -121,10 +118,7 @@ export async function POST(request: NextRequest) {
       kind: "system_notice",
       content: NOT_A_DOCUMENT_QUESTION_MESSAGE,
     });
-    await db
-      .update(conversations)
-      .set({ updatedAt: new Date() })
-      .where(eq(conversations.id, conversation.id));
+    await touchConversation(conversation.id);
 
     return new Response(NOT_A_DOCUMENT_QUESTION_MESSAGE, {
       headers: { "X-Conversation-Id": conversation.id },
@@ -161,10 +155,7 @@ export async function POST(request: NextRequest) {
       kind: "system_notice",
       content: noticeMessage,
     });
-    await db
-      .update(conversations)
-      .set({ updatedAt: new Date() })
-      .where(eq(conversations.id, conversation.id));
+    await touchConversation(conversation.id);
 
     return new Response(noticeMessage, {
       headers: { "X-Conversation-Id": conversation.id },
@@ -208,10 +199,7 @@ export async function POST(request: NextRequest) {
         content: fullText,
         citations,
       });
-      await db
-        .update(conversations)
-        .set({ updatedAt: new Date() })
-        .where(eq(conversations.id, conversation.id));
+      await touchConversation(conversation.id);
 
       controller.close();
     },

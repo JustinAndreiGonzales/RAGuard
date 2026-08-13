@@ -3,7 +3,7 @@ import { cn } from "../lib/utils";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
-type ButtonState = "default" | "hover" | "pressed" | "disabled" | "loading";
+type ButtonState = "default" | "disabled" | "loading";
 type IconPosition = "none" | "leading" | "trailing";
 
 interface ButtonProps extends Omit<
