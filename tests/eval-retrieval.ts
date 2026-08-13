@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { embedTexts } from "@/lib/documents/embed";
+import { rerankedSearch } from "@/lib/retrieval/rerankedSearch";
 import { searchAccessibleChunks } from "@/lib/retrieval/searchAccessibleChunks";
 import { eq } from "drizzle-orm";
 import ExcelJS from "exceljs";
@@ -47,12 +48,17 @@ const LOG_HEADERS = [
   "Misses (no match)",
   "Report File",
   "Notes",
+  "Reranked",
 ];
 
 function getNoteArg(): string {
   const args = process.argv.slice(2);
   const idx = args.findIndex((a) => a === "--note" || a === "-n");
   return idx !== -1 && args[idx + 1] ? args[idx + 1] : "";
+}
+
+function getRerankFlag(): boolean {
+  return process.argv.slice(2).includes("--rerank");
 }
 
 function round(v: number): number {
@@ -67,14 +73,15 @@ async function appendToExcelLog(rowValues: (string | number)[], logPath: string)
     await workbook.xlsx.readFile(logPath);
     sheet = workbook.getWorksheet("Log");
   }
-  if (!sheet) {
-    sheet = workbook.addWorksheet("Log");
-    sheet.addRow(LOG_HEADERS);
-    sheet.getRow(1).font = { bold: true };
-    sheet.columns.forEach((col) => {
-      col.width = 20;
-    });
-  }
+  if (!sheet) sheet = workbook.addWorksheet("Log");
+
+  // Always sync row 1 to the current headers — keeps older files' header row in
+  // sync when a column (like "Reranked") gets added after the file already exists.
+  sheet.getRow(1).values = LOG_HEADERS;
+  sheet.getRow(1).font = { bold: true };
+  LOG_HEADERS.forEach((_, i) => {
+    sheet!.getColumn(i + 1).width = 20;
+  });
 
   sheet.addRow(rowValues);
   await workbook.xlsx.writeFile(logPath);
@@ -103,7 +110,7 @@ function mrr(ranks: (number | null)[]): number {
 }
 
 function ndcgAtK(entry: GoldenEntry, results: RankedResult[], k: number): number {
-  const relevance = results.slice(0, k).map((r) => (isMatch(entry, r) ? 1 : 0));
+  const relevance: number[] = results.slice(0, k).map((r) => (isMatch(entry, r) ? 1 : 0));
   const dcg = relevance.reduce((sum, rel, i) => sum + rel / Math.log2(i + 2), 0);
   const idealHits = Math.min(entry.expectedChunkIndexes.length, k);
   const idcg = Array.from({ length: idealHits }, (_, i) => 1 / Math.log2(i + 2)).reduce(
@@ -147,11 +154,34 @@ async function main() {
   );
   console.log("Embedding call complete — no further Voyage calls needed for the rest of this run.\n");
 
+  const useRerank = getRerankFlag();
+  if (useRerank) {
+    console.log(
+      `Reranking enabled (rerank-2.5 over top ${TOP_K}) — ${goldenSet.length} sequential rerank calls ` +
+        `(one per question; rerank can't batch across questions like embeddings can).\n`,
+    );
+  }
+
   const perQuestion = [];
   for (let i = 0; i < goldenSet.length; i++) {
     const entry = goldenSet[i];
-    const results = await searchAccessibleChunks(embeddings[i], admin.id, true, TOP_K);
-    const ranked: RankedResult[] = results.map((r) => ({ title: r.title, chunkIndex: r.chunkIndex }));
+
+    let ranked: RankedResult[];
+    if (useRerank) {
+      const results = await rerankedSearch(
+        entry.question,
+        embeddings[i],
+        admin.id,
+        true,
+        TOP_K,
+        TOP_K,
+        { fallbackOnError: false },
+      );
+      ranked = results.map((r) => ({ title: r.title, chunkIndex: r.chunkIndex }));
+    } else {
+      const results = await searchAccessibleChunks(embeddings[i], admin.id, true, TOP_K);
+      ranked = results.map((r) => ({ title: r.title, chunkIndex: r.chunkIndex }));
+    }
     const rank = findRank(entry, ranked);
     const ndcg10 = ndcgAtK(entry, ranked, NDCG_K);
     const matched = rank ? ranked[rank - 1] : undefined;
@@ -234,6 +264,7 @@ async function main() {
       misses.length,
       reportRelPath,
       note,
+      useRerank ? "Y" : "N",
     ],
     logPath,
   );

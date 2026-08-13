@@ -1,5 +1,8 @@
 import { embedTexts } from "@/lib/documents/embed";
-import { searchAccessibleChunks } from "@/lib/retrieval/searchAccessibleChunks";
+import { rerankedSearch } from "@/lib/retrieval/rerankedSearch";
+
+const CANDIDATE_POOL_SIZE = 20;
+const FINAL_CHUNK_COUNT = 5;
 
 export async function createUserPrompt(
   userInput: string,
@@ -8,11 +11,13 @@ export async function createUserPrompt(
 ) {
   const [embeddedQuery] = await embedTexts([userInput], "query");
 
-  const relevantChunks = await searchAccessibleChunks(
+  const relevantChunks = await rerankedSearch(
+    userInput,
     embeddedQuery,
     userId,
     isAdmin,
-    5,
+    CANDIDATE_POOL_SIZE,
+    FINAL_CHUNK_COUNT,
   );
 
   if (relevantChunks.length === 0) return null;

@@ -50,10 +50,6 @@ async function seed() {
 
   for (let i = 0; i < EVAL_DOCS.length; i++) {
     const { file, title } = EVAL_DOCS[i];
-    // Voyage's free tier (no payment method on file) is rate-limited to 3 requests/minute;
-    // space out embedding calls so a 12-document seed run doesn't hit 429s. A longer initial
-    // wait also flushes out any quota already used by a previous (failed) run.
-    await new Promise((resolve) => setTimeout(resolve, i === 0 ? 65_000 : 25_000));
 
     const content = readFileSync(path.join(CORPUS_DIR, file), "utf-8");
     const chunks = chunkText(content, {});
