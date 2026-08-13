@@ -32,6 +32,7 @@ export async function GET(
     .select({
       id: messages.id,
       role: messages.role,
+      kind: messages.kind,
       content: messages.content,
       citations: messages.citations,
       createdAt: messages.createdAt,
@@ -45,6 +46,7 @@ export async function GET(
     messages: conversationMessages.map((m) => ({
       id: m.id,
       role: m.role,
+      kind: m.kind,
       content: m.content,
       citations: m.citations ?? undefined,
       createdAt: m.createdAt,

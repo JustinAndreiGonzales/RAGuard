@@ -1,0 +1,151 @@
+[
+  {
+    "id": "c01-pronoun-headcount",
+    "description": "Pronoun/entity follow-up: turn 2 refers back to the subject established in turn 1 with an ambiguous pronoun ('its').",
+    "turns": [
+      {
+        "userInput": "Tell me about Aurora Robotics' 2021 annual report.",
+        "referenceSelfContainedQuestion": "Tell me about Aurora Robotics' 2021 annual report.",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Annual Report 2021", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "What about its headcount?",
+        "referenceSelfContainedQuestion": "How many employees did Aurora Robotics have at the end of fiscal year 2021?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Annual Report 2021", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c02-comparison-follow-up-revenue",
+    "description": "Comparison follow-up: turn 1 asks about one fiscal year, turn 2 asks how that compares to another year — should resolve into a question that plausibly decomposes across both annual reports.",
+    "turns": [
+      {
+        "userInput": "What was Aurora Robotics' total revenue in fiscal year 2021?",
+        "referenceSelfContainedQuestion": "What was Aurora Robotics' total revenue in fiscal year 2021?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Annual Report 2021", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "How does that compare to 2022?",
+        "referenceSelfContainedQuestion": "How did Aurora Robotics' total revenue in fiscal year 2021 compare to fiscal year 2022?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Annual Report 2021", "chunkIndex": 0 },
+          { "documentTitle": "[EVAL] Annual Report 2022", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c03-topic-switch",
+    "description": "Topic switch: turn 2 asks something completely unrelated to turn 1 — the planner must not drag stale context from turn 1 into the resolved question.",
+    "turns": [
+      {
+        "userInput": "What is the maximum flight time of the Falcon Drone v1?",
+        "referenceSelfContainedQuestion": "What is the maximum flight time of the Falcon Drone v1?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Product Spec — Falcon Drone v1", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "What is Aurora Robotics' current sick leave policy?",
+        "referenceSelfContainedQuestion": "What is Aurora Robotics' current sick leave policy?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c04-already-self-contained",
+    "description": "Already-self-contained follow-up: turn 2 is a fully specified new question asked mid-conversation that doesn't need history to resolve — the planner should pass it through close to unchanged, not distort it with turn 1's context.",
+    "turns": [
+      {
+        "userInput": "What was the root cause of the March 14, 2023 dashboard outage?",
+        "referenceSelfContainedQuestion": "What was the root cause of the March 14, 2023 dashboard outage?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Incident Postmortem — March 2023 Outage", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "What is the annual fee for the DataStream Analytics agreement?",
+        "referenceSelfContainedQuestion": "What is the annual fee for the DataStream Analytics agreement?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Vendor Contract — DataStream Analytics", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c05-pronoun-vendor-contract-cost",
+    "description": "Pronoun/entity follow-up: turn 2 refers back to the vendor contract established in turn 1 with 'it'.",
+    "turns": [
+      {
+        "userInput": "Tell me about the CloudScale hosting agreement.",
+        "referenceSelfContainedQuestion": "Tell me about Aurora Robotics' CloudScale hosting agreement.",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "How much does it cost per year?",
+        "referenceSelfContainedQuestion": "What is the annual fee for Aurora Robotics' CloudScale hosting agreement?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c06-pronoun-firmware-incident",
+    "description": "Pronoun/entity follow-up: turn 2 refers back to the incident established in turn 1 with 'it'.",
+    "turns": [
+      {
+        "userInput": "What caused the November 2023 firmware incident?",
+        "referenceSelfContainedQuestion": "What was the root cause of the November 2023 Falcon Drone v2 firmware incident?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "How many drones did it affect?",
+        "referenceSelfContainedQuestion": "How many drones were affected by the November 2023 firmware incident?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "c07-multi-turn-handbook-comparison",
+    "description": "3-turn conversation: turn 1 establishes the original handbook's PTO policy, turn 2 is a pronoun/entity follow-up asking about the current handbook, turn 3 is a comparison follow-up that should resolve into a question comparing both and plausibly decompose.",
+    "turns": [
+      {
+        "userInput": "How many days of PTO did the original employee handbook grant per year?",
+        "referenceSelfContainedQuestion": "How many days of paid time off did the original Aurora Robotics employee handbook grant per year?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Employee Handbook v1 (2022)", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "And how many days does the current one grant?",
+        "referenceSelfContainedQuestion": "How many days of PTO do Aurora Robotics employees accrue per year under the current handbook?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+        ]
+      },
+      {
+        "userInput": "How do those two compare?",
+        "referenceSelfContainedQuestion": "How does the PTO policy in the original Aurora Robotics employee handbook compare to the PTO policy in the current employee handbook?",
+        "expectedChunks": [
+          { "documentTitle": "[EVAL] Employee Handbook v1 (2022)", "chunkIndex": 0 },
+          { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,1548 @@
+{
+  "generatedAt": "2026-08-13T08:48:03.372Z",
+  "topK": 20,
+  "productionRelevanceThreshold": 0.6,
+  "productionMaxK": 8,
+  "overall": {
+    "n": 65,
+    "recall": {
+      "@1": 0.9692307692307692,
+      "@3": 1,
+      "@5": 1,
+      "@10": 1
+    },
+    "mrr": 0.9846153846153847,
+    "ndcg10": 0.9842848677042667
+  },
+  "overallWindow": {
+    "multiChunkCoverage": 0.8,
+    "unanswerableSuppressionRate": 0.8333333333333334,
+    "avgChunkCount": 1.943661971830986
+  },
+  "byCategory": {
+    "direct": {
+      "n": 29,
+      "recall": {
+        "@1": 1,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 1,
+      "ndcg10": 1
+    },
+    "paraphrase": {
+      "n": 13,
+      "recall": {
+        "@1": 0.9230769230769231,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 0.9615384615384616,
+      "ndcg10": 0.9716099810439582
+    },
+    "disambiguation": {
+      "n": 13,
+      "recall": {
+        "@1": 0.9230769230769231,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 0.9615384615384616,
+      "ndcg10": 0.9716099810439582
+    },
+    "trap": {
+      "n": 5,
+      "recall": {
+        "@1": 1,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 1,
+      "ndcg10": 1
+    },
+    "multi-chunk": {
+      "n": 5,
+      "recall": {
+        "@1": 1,
+        "@3": 1,
+        "@5": 1,
+        "@10": 1
+      },
+      "mrr": 1,
+      "ndcg10": 0.9433313787268849
+    },
+    "unanswerable": {
+      "n": 6,
+      "recall": {
+        "@1": 0,
+        "@3": 0,
+        "@5": 0,
+        "@10": 0
+      },
+      "mrr": 0,
+      "ndcg10": 0
+    }
+  },
+  "byCategoryWindow": {
+    "direct": {
+      "multiChunkCoverage": null,
+      "unanswerableSuppressionRate": null,
+      "avgChunkCount": 2.0689655172413794
+    },
+    "paraphrase": {
+      "multiChunkCoverage": null,
+      "unanswerableSuppressionRate": null,
+      "avgChunkCount": 2.076923076923077
+    },
+    "disambiguation": {
+      "multiChunkCoverage": null,
+      "unanswerableSuppressionRate": null,
+      "avgChunkCount": 2.1538461538461537
+    },
+    "trap": {
+      "multiChunkCoverage": null,
+      "unanswerableSuppressionRate": null,
+      "avgChunkCount": 1.8
+    },
+    "multi-chunk": {
+      "multiChunkCoverage": 0.8,
+      "unanswerableSuppressionRate": null,
+      "avgChunkCount": 2.6
+    },
+    "unanswerable": {
+      "multiChunkCoverage": null,
+      "unanswerableSuppressionRate": 0.8333333333333334,
+      "avgChunkCount": 0.16666666666666666
+    }
+  },
+  "overallAnswerQuality": {
+    "n": 71,
+    "passRate": 0.971830985915493,
+    "counts": {
+      "correct": 63,
+      "partially_correct": 2,
+      "incorrect": 0,
+      "correctly_abstained": 6,
+      "unparseable": 0
+    }
+  },
+  "byCategoryAnswerQuality": {
+    "direct": {
+      "n": 29,
+      "passRate": 1,
+      "counts": {
+        "correct": 29,
+        "partially_correct": 0,
+        "incorrect": 0,
+        "correctly_abstained": 0,
+        "unparseable": 0
+      }
+    },
+    "paraphrase": {
+      "n": 13,
+      "passRate": 1,
+      "counts": {
+        "correct": 13,
+        "partially_correct": 0,
+        "incorrect": 0,
+        "correctly_abstained": 0,
+        "unparseable": 0
+      }
+    },
+    "disambiguation": {
+      "n": 13,
+      "passRate": 0.8461538461538461,
+      "counts": {
+        "correct": 11,
+        "partially_correct": 2,
+        "incorrect": 0,
+        "correctly_abstained": 0,
+        "unparseable": 0
+      }
+    },
+    "trap": {
+      "n": 5,
+      "passRate": 1,
+      "counts": {
+        "correct": 5,
+        "partially_correct": 0,
+        "incorrect": 0,
+        "correctly_abstained": 0,
+        "unparseable": 0
+      }
+    },
+    "multi-chunk": {
+      "n": 5,
+      "passRate": 1,
+      "counts": {
+        "correct": 5,
+        "partially_correct": 0,
+        "incorrect": 0,
+        "correctly_abstained": 0,
+        "unparseable": 0
+      }
+    },
+    "unanswerable": {
+      "n": 6,
+      "passRate": 1,
+      "counts": {
+        "correct": 0,
+        "partially_correct": 0,
+        "incorrect": 0,
+        "correctly_abstained": 6,
+        "unparseable": 0
+      }
+    }
+  },
+  "perQuestion": [
+    {
+      "id": "q001",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9609375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9609375,
+        0.89453125
+      ],
+      "generatedAnswer": "According to the 2021 Annual Report, Aurora Robotics Inc. reported total revenue of **$42.3 million** for fiscal year 2021, driven primarily by sales and service contracts for the Falcon Drone platform.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies Aurora Robotics' total revenue for fiscal year 2021 as $42.3 million, matching the expected answer exactly and providing additional context."
+    },
+    {
+      "id": "q002",
+      "category": "direct",
+      "question": "How many employees did Aurora Robotics have at the end of 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9453125,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.9453125,
+        0.765625,
+        0.6171875
+      ],
+      "generatedAnswer": "According to the 2021 Annual Report, Aurora Robotics had **210 employees** by December 31, 2021.\n\nThe report states: \"Headcount grew from 140 employees at the start of the year to 210 employees by December 31, 2021, with the largest growth in the engineering and field services organizations.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that Aurora Robotics had 210 employees at the end of 2021, matching the expected answer exactly and providing supporting details from the source document."
+    },
+    {
+      "id": "q003",
+      "category": "paraphrase",
+      "question": "How much profit did Aurora Robotics make in 2021?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.89453125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.89453125,
+        0.69140625
+      ],
+      "generatedAnswer": "According to the 2021 Annual Report, Aurora Robotics had **net income of $3.1 million** for fiscal year 2021. This represented the company's first full year of profitability.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that Aurora Robotics made $3.1 million in net income for 2021, matching the expected answer and providing additional relevant context."
+    },
+    {
+      "id": "q004",
+      "category": "disambiguation",
+      "question": "According to the 2021 annual report, what did Aurora Robotics expect for 2022?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.66015625,
+      "isTop1Match": false,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.66015625,
+        0.609375
+      ],
+      "generatedAnswer": "According to the 2021 annual report, Aurora Robotics expected the following for 2022:\n\n1. **Continued revenue growth** driven by expansion into new verticals\n2. **A planned next-generation hardware refresh** of the Falcon Drone platform\n3. **Opening a second office location** to support growing customer demand outside the Pacific Northwest",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer captures all three key expectations from the expected answer: continued revenue growth, next-gen Falcon Drone hardware refresh, and a planned second office location, with appropriate supporting details."
+    },
+    {
+      "id": "q005",
+      "category": "direct",
+      "question": "Where is Aurora Robotics headquartered?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2021",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.92578125,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.92578125,
+        0.71875,
+        0.6640625
+      ],
+      "generatedAnswer": "According to the Annual Report 2021, Aurora Robotics is headquartered in **Portland, Oregon**.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies Aurora Robotics as being headquartered in Portland, Oregon, matching the expected answer and providing a source citation."
+    },
+    {
+      "id": "q006",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2022?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.89453125
+      ],
+      "generatedAnswer": "According to the Annual Report 2022, Aurora Robotics Inc. reported total revenue of **$58.7 million** for fiscal year 2022, which represented a 38.7% increase over fiscal year 2021's revenue of $42.3 million.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states Aurora Robotics' total revenue for fiscal year 2022 as $58.7 million, matching the expected answer exactly and providing additional supporting context."
+    },
+    {
+      "id": "q007",
+      "category": "disambiguation",
+      "question": "By what percentage did Aurora Robotics' revenue grow in fiscal year 2022 compared to the prior year?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94140625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.94140625,
+        0.8046875
+      ],
+      "generatedAnswer": "According to the Annual Report 2022, Aurora Robotics' revenue grew by **38.7%** in fiscal year 2022 compared to the prior year. \n\nThe report states: \"Aurora Robotics Inc. reported total revenue of $58.7 million for fiscal year 2022, an increase of 38.7% over fiscal year 2021's revenue of $42.3 million.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the 38.7% revenue growth figure and provides supporting details that match the expected answer."
+    },
+    {
+      "id": "q008",
+      "category": "direct",
+      "question": "What company did Aurora Robotics acquire in 2022, and what technology did it bring in-house?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.953125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.953125,
+        0.76171875
+      ],
+      "generatedAnswer": "Based on the provided context, Aurora Robotics acquired **SkyMetrics** in March 2022. This acquisition brought **LIDAR sensing technology** in-house.\n\nAccording to the Annual Report 2022, SkyMetrics was \"a small startup specializing in compact LIDAR sensors for aerial platforms.\" The acquisition allowed Aurora Robotics to \"bring high-precision 3D mapping capability directly into our own hardware rather than relying on third-party sensor vendors.\" The newly integrated LIDAR sensor from SkyMetrics was subsequently featured in the Falcon Drone v2, which launched in Q4 2022.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies SkyMetrics as the acquired company and compact LIDAR sensor technology as the technology brought in-house, with supporting details from the referenced documents."
+    },
+    {
+      "id": "q009",
+      "category": "paraphrase",
+      "question": "When did Aurora Robotics open its Austin, Texas office?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.8984375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.8984375,
+        0.703125
+      ],
+      "generatedAnswer": "According to the context, Aurora Robotics opened its second office in Austin, Texas in the third quarter of 2022. The 2022 Annual Report states: \"In the third quarter of 2022, we opened a second office in Austin, Texas, to support sales and field service operations across the central and southern United States.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies that Aurora Robotics opened its Austin, Texas office in Q3 2022, matching the expected answer and providing supporting documentation."
+    },
+    {
+      "id": "q010",
+      "category": "disambiguation",
+      "question": "According to the 2022 annual report, what did Aurora Robotics expect for 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.66015625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.66015625,
+        0.65625
+      ],
+      "generatedAnswer": "According to the 2022 annual report, Aurora Robotics expected the following for 2023:\n\n1. **Continued growth** in both the industrial inspection and agricultural verticals\n2. **Further expansion of the Austin office**\n3. **Increased investment in field service infrastructure** to support the growing installed base of Falcon Drone v2 units",
+      "verdict": "partially_correct",
+      "verdictReasoning": "The actual answer correctly captures the two main expected items (continued growth in industrial inspection and agricultural verticals, and further Austin office expansion) but adds a third item (increased investment in field service infrastructure) that is not mentioned in the expected answer, and it's unclear whether this additional detail is actually from the 2022 annual report or represents potential hallucination."
+    },
+    {
+      "id": "q011",
+      "category": "direct",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.61328125
+      ],
+      "generatedAnswer": "According to the 2023 Annual Report, Aurora Robotics Inc. reported total revenue of **$71.2 million** for fiscal year 2023, which represented a 21.3% increase over fiscal year 2022's revenue of $58.7 million.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies Aurora Robotics' total revenue for fiscal year 2023 as $71.2 million, matching the expected answer and providing additional relevant context."
+    },
+    {
+      "id": "q012",
+      "category": "trap",
+      "question": "Did Aurora Robotics report a net profit or a net loss in fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94921875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.94921875,
+        0.6015625
+      ],
+      "generatedAnswer": "According to the 2023 Annual Report, Aurora Robotics reported a **net loss of $2.8 million** for fiscal year 2023.\n\nThe report states: \"Despite continued revenue growth, the company recorded a net loss of $2.8 million for the year, driven by increased research and development spending, expansion costs in Austin, and approximately $420,000 in unplanned support costs related to the November 2023 firmware incident.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the net loss of $2.8 million for fiscal year 2023 and captures the key content of the expected answer."
+    },
+    {
+      "id": "q013",
+      "category": "direct",
+      "question": "Who became CEO of Aurora Robotics in 2023, and who did they succeed?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9140625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9140625,
+        0.640625
+      ],
+      "generatedAnswer": "According to the Annual Report 2023, **Raj Patel** became CEO of Aurora Robotics in 2023, succeeding **Elena Marsh**. \n\nThe report states that Elena Marsh, the founding CEO, stepped down in September 2023 after eight years leading the company, and Raj Patel, who was previously the Chief Operating Officer, was named her successor.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies that Raj Patel became CEO in 2023 and succeeded Elena Marsh, matching the expected answer exactly and providing supporting details from the source document."
+    },
+    {
+      "id": "q014",
+      "category": "paraphrase",
+      "question": "How many operational incidents affected Aurora Robotics in 2023 according to the annual report?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9296875,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.9296875,
+        0.65625,
+        0.60546875
+      ],
+      "generatedAnswer": "According to the annual report, **two operational incidents** affected Aurora Robotics in 2023:\n\n1. **March 2023 cloud dashboard outage** — caused by database connection pool exhaustion\n2. **November 2023 firmware update incident** — affected approximately 340 Falcon Drone v2 units in the field\n\nAs stated in the Business Overview section: \"The year was also marked by two operational incidents that are documented in detail in separate incident postmortems.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies two operational incidents (March dashboard outage and November firmware incident) and provides accurate supporting details that align with the expected answer."
+    },
+    {
+      "id": "q015",
+      "category": "disambiguation",
+      "question": "According to the 2023 annual report, what is Aurora Robotics' outlook for 2024?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.69921875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.69921875,
+        0.625
+      ],
+      "generatedAnswer": "According to the 2023 Annual Report, Aurora Robotics' outlook for 2024 is:\n\nManagement is prioritizing **reliability and operational excellence** following the incidents of 2023, alongside **continued expansion of the Falcon Drone product line into new industrial verticals**.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately captures the key elements of the expected answer: prioritizing reliability and operational excellence while continuing to expand the Falcon Drone product line, with additional helpful context about the incidents of 2023 and expansion into new verticals."
+    },
+    {
+      "id": "q016",
+      "category": "direct",
+      "question": "How many days of paid time off did the original Aurora Robotics employee handbook grant per year?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.87890625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.87890625,
+        0.87890625
+      ],
+      "generatedAnswer": "According to the original Aurora Robotics Employee Handbook (Version 1, effective January 2022), full-time employees accrued **15 days of paid time off (PTO) per year**, accrued monthly at a rate of 1.25 days per month.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies 15 days of paid time off per year, matching the expected answer, and provides additional relevant detail about the accrual rate."
+    },
+    {
+      "id": "q017",
+      "category": "disambiguation",
+      "question": "Under the handbook effective January 2022, how many remote work days per week were employees allowed?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.93359375,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.93359375,
+        0.7578125,
+        0.71875
+      ],
+      "generatedAnswer": "According to the Aurora Robotics Employee Handbook (Version 1, effective January 2022), employees were allowed to work remotely up to **2 days per week** with prior manager approval. Requests for additional remote days had to be submitted in writing and approved on a case-by-case basis by the employee's manager and HR.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately states that employees were allowed up to 2 days per week with manager approval, matching the expected answer and providing proper documentation source."
+    },
+    {
+      "id": "q018",
+      "category": "direct",
+      "question": "How many weeks of paid parental leave did Aurora Robotics offer under the original handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.91015625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.91015625,
+        0.890625
+      ],
+      "generatedAnswer": "According to the original Employee Handbook (Version 1, effective January 2022), Aurora Robotics offered **8 weeks of paid parental leave** for the birth, adoption, or fostering of a child.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that Aurora Robotics offered 8 weeks of paid parental leave under the original handbook, matching the expected answer with additional supporting detail about the policy's scope."
+    },
+    {
+      "id": "q019",
+      "category": "paraphrase",
+      "question": "How long did employees have to file expense reports under the original handbook?",
+      "rank": 2,
+      "ndcg10": 0.6309297535714575,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.828125,
+      "isTop1Match": false,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.828125,
+        0.7890625
+      ],
+      "generatedAnswer": "Under the original handbook (Version 1, effective January 2022), employees had to submit expense reports for reimbursement within **30 days** of incurring the expense. Reports submitted after 30 days could be denied at management's discretion.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the 30-day filing requirement and provides accurate supporting context about the original handbook version and consequences of late filing."
+    },
+    {
+      "id": "q020",
+      "category": "direct",
+      "question": "What was Aurora Robotics' dress code under the version 1 handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v1 (2022)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.86328125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.86328125,
+        0.72265625
+      ],
+      "generatedAnswer": "According to the Employee Handbook v1 (2022), Aurora Robotics maintained a **business casual dress code** in all office locations. The handbook also noted that client-facing roles and field service technicians should follow additional guidance provided by their department.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the dress code as 'business casual' and provides additional context about client-facing roles that is consistent with the expected answer."
+    },
+    {
+      "id": "q021",
+      "category": "direct",
+      "question": "How many days of PTO do Aurora Robotics employees accrue per year under the current handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.953125,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.953125,
+        0.9453125,
+        0.671875
+      ],
+      "generatedAnswer": "According to the current Aurora Robotics Employee Handbook (Version 2, effective March 2024), full-time employees accrue **20 days of paid time off (PTO) per year**. This represents an increase from the previous policy of 15 days per year.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that Aurora Robotics employees accrue 20 days of PTO per year, matching the expected answer, and provides additional contextual details about the handbook version and previous policy."
+    },
+    {
+      "id": "q022",
+      "category": "disambiguation",
+      "question": "Is remote work still capped at 2 days per week under the 2024 handbook?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94921875,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.94921875,
+        0.6953125,
+        0.63671875
+      ],
+      "generatedAnswer": "No. According to the 2024 handbook (Version 2), the 2-day-per-week remote work cap has been removed. The handbook states:\n\n\"The 2-day-per-week remote work cap from the previous handbook has been removed. Employees may work fully remotely, fully in-office, or any mix in between, as long as their team's collaboration needs and customer commitments are met.\"\n\nAdditionally, manager approval is no longer required for remote work arrangements.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer directly confirms the expected answer that the cap was removed and employees can work fully remote, fully in-office, or any mix, with the addition of verified supporting detail from the 2024 handbook."
+    },
+    {
+      "id": "q023",
+      "category": "direct",
+      "question": "How many weeks of paid parental leave does the 2024 handbook offer?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.91796875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.91796875,
+        0.71875
+      ],
+      "generatedAnswer": "According to the 2024 Employee Handbook (Version 2), Aurora Robotics offers **12 weeks of paid parental leave** for the birth, adoption, or fostering of a child. This represents an increase from the 8 weeks offered under the previous policy.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that 12 weeks of paid parental leave are offered, matching the expected answer, and provides additional relevant context about the policy."
+    },
+    {
+      "id": "q024",
+      "category": "paraphrase",
+      "question": "What is Aurora Robotics' current sick leave policy?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.91796875,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.91796875
+      ],
+      "generatedAnswer": "According to the Aurora Robotics Employee Handbook (Version 2, effective March 2024), the company has moved to an **unlimited sick leave policy**. Employees no longer need to draw down their PTO (paid time off) balances for illness.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies Aurora Robotics' sick leave policy as unlimited sick leave, matching the expected answer and providing accurate supporting details from the employee handbook."
+    },
+    {
+      "id": "q025",
+      "category": "direct",
+      "question": "What is the amount of Aurora Robotics' quarterly wellness stipend?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.93359375,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.93359375
+      ],
+      "generatedAnswer": "According to the Aurora Robotics Employee Handbook (Version 2, effective March 2024), the quarterly wellness stipend is **$150 per employee**. This stipend can be used for gym memberships, fitness equipment, or mental health services.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the quarterly wellness stipend amount of $150 per quarter, matching the expected answer, and provides additional relevant context from the source document."
+    },
+    {
+      "id": "q026",
+      "category": "direct",
+      "question": "What is the maximum flight time of the Falcon Drone v1?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.8203125
+      ],
+      "generatedAnswer": "According to the Falcon Drone v1 Product Specification, the maximum flight time of the Falcon Drone v1 is **35 minutes on a single battery charge**.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the maximum flight time is 35 minutes, matching the expected answer and providing appropriate supporting detail from the product specification."
+    },
+    {
+      "id": "q027",
+      "category": "disambiguation",
+      "question": "What is the maximum payload capacity of the original Falcon Drone?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.92578125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.92578125,
+        0.82421875
+      ],
+      "generatedAnswer": "The maximum payload capacity of the original Falcon Drone (v1) is **2.5 kilograms**, as stated in the Product Specification for Falcon Drone v1.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the maximum payload capacity as 2.5 kilograms and matches the expected answer."
+    },
+    {
+      "id": "q028",
+      "category": "paraphrase",
+      "question": "How long does it take to recharge the Falcon Drone v1's battery?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.91796875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.91796875,
+        0.75390625
+      ],
+      "generatedAnswer": "According to the product specification, the Falcon Drone v1's lithium-ion battery pack recharges fully in approximately 45 minutes.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer provides the exact same information as the expected answer (approximately 45 minutes) and includes additional relevant details about the battery type."
+    },
+    {
+      "id": "q029",
+      "category": "direct",
+      "question": "What optional sensor add-on does the Falcon Drone v1 support for heat signature detection?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.90234375,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.90234375
+      ],
+      "generatedAnswer": "According to the product specification, the Falcon Drone v1 supports an **optional thermal imaging add-on module** for inspections requiring heat signature detection, such as identifying insulation failures on pipelines.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the thermal imaging add-on module as the optional sensor for heat signature detection on the Falcon Drone v1, matching the expected answer with additional helpful context."
+    },
+    {
+      "id": "q030",
+      "category": "direct",
+      "question": "What is the maximum flight time of the Falcon Drone v2?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96875,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.96875,
+        0.6796875,
+        0.625
+      ],
+      "generatedAnswer": "According to the Product Specification document, the Falcon Drone v2 has a maximum flight time of **52 minutes** on a single battery charge.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately states the maximum flight time of the Falcon Drone v2 as 52 minutes, matching the expected answer and citing an appropriate source document."
+    },
+    {
+      "id": "q031",
+      "category": "disambiguation",
+      "question": "What is the maximum payload capacity of the Falcon Drone v2?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 4,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.68359375,
+        0.6328125,
+        0.61328125
+      ],
+      "generatedAnswer": "According to the Product Specification for the Falcon Drone v2, the maximum payload capacity is **4 kilograms**, which is an increase from the v1's 2.5 kilograms.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the maximum payload capacity of the Falcon Drone v2 is 4 kilograms, matching the expected answer with additional helpful context."
+    },
+    {
+      "id": "q032",
+      "category": "direct",
+      "question": "What new autonomous capability did the Falcon Drone v2 introduce?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.93359375,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.93359375,
+        0.72265625,
+        0.6640625
+      ],
+      "generatedAnswer": "According to the Falcon Drone v2 Product Specification, the drone introduced **autonomous obstacle avoidance**. This capability allows the drone to detect and navigate around unexpected obstacles such as construction equipment or wildlife without operator intervention. The specification notes that this feature was a key requirement for expanding into construction site inspection.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies and explains the autonomous obstacle avoidance capability introduced by the Falcon Drone v2, matching the expected answer with appropriate supporting details."
+    },
+    {
+      "id": "q033",
+      "category": "paraphrase",
+      "question": "According to the Falcon Drone v2 product spec, what changed about firmware update rollouts after the November 2023 incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.90234375,
+      "isTop1Match": true,
+      "windowSize": 4,
+      "windowRelevanceScores": [
+        0.90234375,
+        0.7890625,
+        0.77734375,
+        0.6328125
+      ],
+      "generatedAnswer": "According to the Falcon Drone v2 product spec, after the November 2023 firmware incident, all firmware updates now go through a **staged rollout process with mandatory hardware-in-the-loop testing before release to the full fleet**.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately captures the key content of the expected answer: staged rollout process with mandatory hardware-in-the-loop testing, and appropriately attributes this information to the Falcon Drone v2 product spec."
+    },
+    {
+      "id": "q056",
+      "category": "disambiguation",
+      "question": "What camera resolution does the Falcon Drone v2 include?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.8828125,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.8828125
+      ],
+      "generatedAnswer": "According to the product specification, the Falcon Drone v2 includes a **20-megapixel camera** as part of its standard sensor package.",
+      "verdict": "partially_correct",
+      "verdictReasoning": "The actual answer correctly identifies the 20-megapixel camera but omits the integrated LIDAR component mentioned in the expected answer."
+    },
+    {
+      "id": "q034",
+      "category": "direct",
+      "question": "What was the root cause of the March 14, 2023 dashboard outage?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.7578125,
+        0.7421875
+      ],
+      "generatedAnswer": "According to the Incident Postmortem document, the root cause of the March 14, 2023 dashboard outage was **database connection pool exhaustion**.\n\nSpecifically, the fleet management dashboard's backend service was configured with a fixed connection pool size that had not been re-evaluated since the service was first deployed. A sudden spike in concurrent logins—driven by a marketing email campaign—exceeded the pool's capacity. Requests queued faster than they could be served, eventually timing out and causing the service to become unavailable.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the root cause as database connection pool exhaustion and provides accurate supporting details that align with the expected answer."
+    },
+    {
+      "id": "q035",
+      "category": "direct",
+      "question": "How many customers were affected by the March 2023 outage?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.8984375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.8984375,
+        0.66796875
+      ],
+      "generatedAnswer": "According to the incident postmortem, approximately **1,200 customers** were affected by the March 2023 outage. They were unable to access live drone telemetry or historical flight logs for up to 6 hours.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that approximately 1,200 customers were affected by the March 2023 outage, matching the expected answer and providing additional relevant context about the impact."
+    },
+    {
+      "id": "q036",
+      "category": "paraphrase",
+      "question": "How long was Aurora Robotics' dashboard unavailable during the March 2023 incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94140625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.94140625,
+        0.69921875
+      ],
+      "generatedAnswer": "According to the incident postmortem, Aurora Robotics' fleet management dashboard was unavailable for approximately **6 hours** during the March 2023 outage. The outage began at 9:12 AM Pacific Time when a marketing email campaign triggered a spike in signups and logins, and full service was restored at approximately 3:15 PM Pacific Time on March 14, 2023.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that the dashboard was unavailable for approximately 6 hours, matching the expected answer, and provides additional supporting details about the incident timeline."
+    },
+    {
+      "id": "q037",
+      "category": "direct",
+      "question": "What monitoring change did Aurora Robotics make after the March 2023 outage?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — March 2023 Outage",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.83984375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.83984375,
+        0.63671875
+      ],
+      "generatedAnswer": "According to the incident postmortem, Aurora Robotics added a new monitoring alert after the March 2023 outage. Specifically, the alert notifies the on-call engineer when database connection pool utilization exceeds 80%, well before exhaustion occurs.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately captures the key content of the expected answer: Aurora Robotics added a new alert that triggers when connection pool utilization exceeds 80%."
+    },
+    {
+      "id": "q038",
+      "category": "direct",
+      "question": "What was the root cause of the November 2023 Falcon Drone v2 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96875,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.96875,
+        0.71875,
+        0.63671875
+      ],
+      "generatedAnswer": "According to the Incident Postmortem document, the root cause of the November 2023 Falcon Drone v2 firmware incident was **a missing compatibility check in the OTA update pipeline**.\n\nSpecifically, the new firmware assumed a minimum battery controller firmware version that was not present on a subset of older Falcon Drone v2 units still running their original factory battery firmware. When the new flight firmware was installed on top of the older battery firmware, the drone's power management system entered a fault state on boot, which made the devices appear fully bricked to customers.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the root cause as a missing compatibility check, and provides accurate supporting details about the battery controller firmware version mismatch that matches the expected answer's core claim."
+    },
+    {
+      "id": "q039",
+      "category": "direct",
+      "question": "How many drones were affected by the November 2023 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9375,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.9375,
+        0.8828125,
+        0.875
+      ],
+      "generatedAnswer": "According to the context, approximately **340 Falcon Drone v2 units** were affected by the November 2023 firmware incident.\n\nThis is stated in the incident postmortem: \"On November 2, 2023, a firmware update pushed to Falcon Drone v2 units in the field caused approximately 340 drones to become unresponsive ('bricked'), requiring manual re-flashing at authorized service centers.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies that approximately 340 drones were affected by the November 2023 firmware incident, matching the expected answer and providing accurate supporting details from the source document."
+    },
+    {
+      "id": "q040",
+      "category": "trap",
+      "question": "What was the total remediation cost of the November 2023 firmware incident?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.92578125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.92578125,
+        0.7421875
+      ],
+      "generatedAnswer": "According to the incident postmortem, the total remediation cost of the November 2023 firmware incident was approximately **$420,000**. This included technician time, shipping, and customer credits for the approximately 340 Falcon Drone v2 units that required manual re-flashing at Aurora Robotics service centers.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer provides the exact figure of approximately $420,000 and includes relevant details about what the cost comprised, matching the expected answer."
+    },
+    {
+      "id": "q041",
+      "category": "paraphrase",
+      "question": "What process change did Aurora Robotics introduce after the firmware incident to prevent recurrence?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.87109375,
+      "isTop1Match": true,
+      "windowSize": 4,
+      "windowRelevanceScores": [
+        0.87109375,
+        0.765625,
+        0.66015625,
+        0.64453125
+      ],
+      "generatedAnswer": "Based on the context provided, Aurora Robotics introduced the following process change after the November 2023 firmware incident:\n\n**A mandatory staged rollout process for all future OTA updates**, starting with a small percentage of the fleet and expanding gradually. Additionally, **hardware-in-the-loop testing against representative battery firmware versions is now required before any OTA update is approved for release.**\n\nThese changes are described in the Incident Postmortem as \"Follow-up Actions\" and are also noted in the Product Spec for Falcon Drone v2, which states that \"all firmware updates now go through a staged rollout process with mandatory hardware-in-the-loop testing before release to the full fleet.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately captures both key process changes mentioned in the expected answer: mandatory staged rollout and hardware-in-the-loop testing before OTA releases, with appropriate supporting details and documentation references."
+    },
+    {
+      "id": "q042",
+      "category": "direct",
+      "question": "What is the annual fee for Aurora Robotics' CloudScale hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96484375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.96484375,
+        0.76953125
+      ],
+      "generatedAnswer": "According to the CloudScale Hosting vendor contract, Aurora Robotics pays CloudScale Hosting Inc. an annual fee of **$480,000**, invoiced quarterly at $120,000 per quarter.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the annual fee of $480,000 and provides additional helpful detail about the quarterly invoicing structure, which aligns with and supports the expected answer."
+    },
+    {
+      "id": "q043",
+      "category": "direct",
+      "question": "What uptime does CloudScale Hosting guarantee to Aurora Robotics?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9453125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9453125,
+        0.62890625
+      ],
+      "generatedAnswer": "According to the CloudScale Hosting vendor contract, CloudScale Hosting Inc. guarantees **99.9% monthly uptime** for all hosted infrastructure.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that CloudScale Hosting guarantees 99.9% monthly uptime, which matches the expected answer exactly."
+    },
+    {
+      "id": "q044",
+      "category": "paraphrase",
+      "question": "How much advance notice is needed to terminate the CloudScale hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.87109375,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.87109375
+      ],
+      "generatedAnswer": "According to the Termination section of the CloudScale Hosting vendor agreement, either party may terminate the agreement with **90 days' written notice**.\n\nHowever, there is an exception: Aurora Robotics may terminate **immediately** for cause if CloudScale Hosting materially breaches the service level agreement and does not cure the breach within 30 days of written notice.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that 90 days' written notice is required to terminate the CloudScale hosting agreement, which matches the expected answer, and provides additional relevant context about termination for cause."
+    },
+    {
+      "id": "q045",
+      "category": "trap",
+      "question": "How many days' written notice are required to terminate Aurora Robotics' cloud hosting contract?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.87890625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.87890625,
+        0.765625
+      ],
+      "generatedAnswer": "According to the CloudScale Hosting vendor contract, either party may terminate the agreement with **90 days' written notice**.\n\nAdditionally, Aurora Robotics has the option to terminate immediately for cause if CloudScale Hosting materially breaches the service level agreement and fails to cure the breach within 30 days of written notice.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies 90 days' written notice as the required termination period for Aurora Robotics' cloud hosting contract, matching the expected answer's key factual content."
+    },
+    {
+      "id": "q060",
+      "category": "trap",
+      "question": "How much does Aurora Robotics pay per quarter under its cloud hosting agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — CloudScale Hosting",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9296875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9296875,
+        0.6171875
+      ],
+      "generatedAnswer": "According to the CloudScale Hosting vendor contract, Aurora Robotics pays **$120,000 per quarter** for cloud infrastructure hosting services. \n\nThe contract specifies that the annual fee of $480,000 is \"invoiced quarterly at $120,000 per quarter.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the $120,000 per quarter payment amount and provides supporting detail from the contract document."
+    },
+    {
+      "id": "q046",
+      "category": "direct",
+      "question": "What is the annual fee for the DataStream Analytics agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9296875,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.9296875
+      ],
+      "generatedAnswer": "According to the vendor contract, Aurora Robotics pays DataStream Analytics LLC an annual fee of **$210,000**, which is invoiced monthly at $17,500 per month.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states the annual fee of $210,000 and provides additional relevant context about the monthly invoicing structure."
+    },
+    {
+      "id": "q047",
+      "category": "direct",
+      "question": "What uptime does DataStream Analytics guarantee for the data ingestion pipeline?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9375,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.9375
+      ],
+      "generatedAnswer": "According to the Service Level Agreement section of the vendor contract, DataStream Analytics LLC guarantees **99.5% monthly uptime** for the data ingestion pipeline.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that DataStream Analytics guarantees 99.5% monthly uptime for the data ingestion pipeline, matching the expected answer exactly and providing appropriate source attribution."
+    },
+    {
+      "id": "q048",
+      "category": "paraphrase",
+      "question": "How long is telemetry data retained under the DataStream agreement?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.86328125,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.86328125
+      ],
+      "generatedAnswer": "According to the Service Level Agreement section of the DataStream Analytics contract, DataStream Analytics LLC commits to a **minimum data retention period of 5 years** for all processed telemetry data.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that telemetry data is retained for a minimum of 5 years under the DataStream agreement, matching the expected answer."
+    },
+    {
+      "id": "q049",
+      "category": "disambiguation",
+      "question": "Which of Aurora Robotics' vendor agreements was signed in June 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.92578125,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.92578125
+      ],
+      "generatedAnswer": "Based on the provided context, the **DataStream Analytics LLC vendor agreement** was signed in June 2023.\n\nThis agreement is between Aurora Robotics Inc. and DataStream Analytics LLC for the provision of telemetry data analytics and storage pipeline services for the Falcon Drone fleet, with an initial term of 2 years expiring in June 2025.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies DataStream Analytics as the vendor agreement signed in June 2023, matching the expected answer and providing accurate supporting details about the agreement."
+    },
+    {
+      "id": "q058",
+      "category": "trap",
+      "question": "Which Aurora Robotics vendor agreement covers storage of LIDAR point cloud data?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.84765625,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.84765625
+      ],
+      "generatedAnswer": "Based on the provided context, the vendor agreement with **DataStream Analytics LLC** covers storage of LIDAR point cloud data.\n\nAccording to the document, DataStream Analytics LLC operates the data pipeline that processes and stores telemetry data generated by Falcon Drone units, which includes \"flight logs, sensor readings, and LIDAR point cloud data.\" The agreement specifies a minimum data retention period of 5 years for all processed telemetry data.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies DataStream Analytics as the vendor agreement covering storage of LIDAR point cloud data, matching the expected answer and providing accurate supporting details about the agreement."
+    },
+    {
+      "id": "q050",
+      "category": "direct",
+      "question": "How many approvals are required before a code change can be merged at Aurora Robotics?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94921875,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.94921875
+      ],
+      "generatedAnswer": "According to the Code Review Policy section, **at least 2 approvals from other engineers** are required before a code change can be merged at Aurora Robotics, regardless of the size of the change.\n\nAdditionally, changes to shared infrastructure or the fleet management dashboard's data pipeline require an additional review from a member of the platform team.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that 2 approvals are required before code changes can be merged at Aurora Robotics, matching the expected answer, and provides additional relevant context from the policy."
+    },
+    {
+      "id": "q051",
+      "category": "direct",
+      "question": "What internal CLI tool do Aurora Robotics engineers use for local development tasks?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.921875,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.921875
+      ],
+      "generatedAnswer": "According to the onboarding guide, Aurora Robotics engineers use an internal command-line tool called **`aurora-cli`** for local development tasks. This tool automates common tasks such as spinning up local service dependencies, running database migrations, and seeding test data.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies aurora-cli as the internal CLI tool used by Aurora Robotics engineers for local development tasks, and provides accurate supporting details about its functionality."
+    },
+    {
+      "id": "q052",
+      "category": "paraphrase",
+      "question": "When do new engineers at Aurora Robotics join the on-call rotation?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9609375,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.9609375
+      ],
+      "generatedAnswer": "According to the onboarding guide, new engineers at Aurora Robotics join the on-call rotation **after their first 3 months at the company, once they have ramped up on the relevant systems**. On-call shifts are one week long, and engineers are paged through PagerDuty for production incidents.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that new engineers join the on-call rotation after their first 3 months, which matches the expected answer, and provides appropriate additional relevant context about on-call procedures."
+    },
+    {
+      "id": "q053",
+      "category": "paraphrase",
+      "question": "What support is a new Aurora Robotics engineer given for their first 90 days?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 1,
+      "top1RelevanceScore": 0.8359375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.8359375,
+        0.75
+      ],
+      "generatedAnswer": "# Support for New Aurora Robotics Engineers (First 90 Days)\n\nAccording to the Engineering Onboarding Guide, new engineers at Aurora Robotics receive the following support during their first 90 days:\n\n**Onboarding Buddy**: Every new engineer is assigned an onboarding buddy for their first 90 days. Your buddy is available to:\n- Answer day-to-day questions\n- Help you navigate the codebase\n- Make sure you feel supported as you ramp up\n\nAdditionally, during the first week, new engineers meet with their manager and immediate team members, and review architecture documentation for the systems they'll be working on.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies and explains the assigned onboarding buddy as the primary support mechanism for new Aurora Robotics engineers during their first 90 days, matching the expected answer while providing additional relevant context."
+    },
+    {
+      "id": "q054",
+      "category": "direct",
+      "question": "What tool does Aurora Robotics use for on-call alerting and incident management?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Engineering Onboarding Guide",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9453125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9453125,
+        0.80859375
+      ],
+      "generatedAnswer": "According to the Engineering Onboarding Guide, Aurora Robotics uses **PagerDuty** for on-call alerting and incident management. The document specifically states that \"engineers are paged through PagerDuty for production incidents.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies PagerDuty as the tool Aurora Robotics uses for on-call alerting and incident management, with supporting details from the Engineering Onboarding Guide."
+    },
+    {
+      "id": "q055",
+      "category": "disambiguation",
+      "question": "What was Aurora Robotics' net income specifically in fiscal year 2022?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.94140625,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.94140625,
+        0.6875
+      ],
+      "generatedAnswer": "According to the 2022 Annual Report, Aurora Robotics' net income for fiscal year 2022 was **$5.4 million**.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer provides the exact figure of $5.4 million for Aurora Robotics' net income in fiscal year 2022, which matches the expected answer perfectly."
+    },
+    {
+      "id": "q057",
+      "category": "disambiguation",
+      "question": "What camera resolution does the original Falcon Drone (v1) include?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v1",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.88671875,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.88671875,
+        0.66015625
+      ],
+      "generatedAnswer": "According to the Falcon Drone v1 product specification, the original Falcon Drone includes a **12-megapixel camera** as part of its standard sensor package.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies that the original Falcon Drone (v1) includes a 12-megapixel camera, matching the expected answer."
+    },
+    {
+      "id": "q059",
+      "category": "disambiguation",
+      "question": "How many employees did Aurora Robotics have at the end of fiscal year 2023?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.9453125,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.9453125,
+        0.65625
+      ],
+      "generatedAnswer": "According to the 2023 Annual Report, Aurora Robotics had **340 employees** by December 31, 2023.\n\nThe report states: \"Headcount grew from 275 employees at the start of the year to 340 employees by December 31, 2023.\"",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states that Aurora Robotics had 340 employees at the end of fiscal year 2023, matching the expected answer with supporting documentation."
+    },
+    {
+      "id": "q061",
+      "category": "multi-chunk",
+      "question": "How did Aurora Robotics' total revenue change from fiscal year 2021 to fiscal year 2022?",
+      "rank": 1,
+      "ndcg10": 0.9197207891481876,
+      "matchedTitle": "[EVAL] Annual Report 2022",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.953125,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.953125,
+        0.6875,
+        0.625
+      ],
+      "multiChunkCovered": true,
+      "generatedAnswer": "Based on the Annual Reports provided:\n\n**Fiscal Year 2021**: Total revenue of $42.3 million\n**Fiscal Year 2022**: Total revenue of $58.7 million\n\n**Change**: Aurora Robotics' revenue increased by $16.4 million, representing a **38.7% increase** from fiscal year 2021 to fiscal year 2022.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly states both the FY2021 revenue ($42.3M), FY2022 revenue ($58.7M), and the percentage increase (38.7%), matching all key details in the expected answer."
+    },
+    {
+      "id": "q062",
+      "category": "multi-chunk",
+      "question": "How did Aurora Robotics' headcount grow from the end of 2021 to the end of 2023?",
+      "rank": 1,
+      "ndcg10": 0.9197207891481876,
+      "matchedTitle": "[EVAL] Annual Report 2023",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.859375,
+      "isTop1Match": true,
+      "windowSize": 3,
+      "windowRelevanceScores": [
+        0.859375,
+        0.734375,
+        0.68359375
+      ],
+      "multiChunkCovered": true,
+      "generatedAnswer": "Based on the annual reports provided:\n\n**Headcount at the end of 2021:** 210 employees\n\n**Headcount at the end of 2023:** 340 employees\n\n**Total growth:** Aurora Robotics' headcount grew by **130 employees** (from 210 to 340) over the two-year period from the end of 2021 to the end of 2023.\n\nTo break this down by year:\n- 2021 to 2022: Growth from 210 to 275 employees (+65 employees)\n- 2022 to 2023: Growth from 275 to 340 employees (+65 employees)",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies the headcount at the end of 2021 (210 employees) and end of 2023 (340 employees), matching the expected answer, and provides additional helpful breakdown of the growth trajectory."
+    },
+    {
+      "id": "q063",
+      "category": "multi-chunk",
+      "question": "How does the Falcon Drone v2's maximum flight time compare to the v1's?",
+      "rank": 1,
+      "ndcg10": 0.8772153153380493,
+      "matchedTitle": "[EVAL] Product Spec — Falcon Drone v2",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.96875,
+      "isTop1Match": true,
+      "windowSize": 4,
+      "windowRelevanceScores": [
+        0.96875,
+        0.70703125,
+        0.68359375,
+        0.64453125
+      ],
+      "multiChunkCovered": true,
+      "generatedAnswer": "Based on the provided context, the Falcon Drone v2 has a maximum flight time of **52 minutes** on a single battery charge, compared to the v1's **35 minutes**. This represents a significant improvement of 17 minutes, or approximately 49% longer flight time.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies both flight times (v1: 35 minutes, v2: 52 minutes) and accurately describes the improvement, matching the expected answer."
+    },
+    {
+      "id": "q064",
+      "category": "multi-chunk",
+      "question": "What are the annual fees for both of Aurora Robotics' vendor contracts?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Vendor Contract — DataStream Analytics",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.77734375,
+      "isTop1Match": true,
+      "windowSize": 2,
+      "windowRelevanceScores": [
+        0.77734375,
+        0.77734375
+      ],
+      "multiChunkCovered": true,
+      "generatedAnswer": "# Annual Fees for Aurora Robotics' Vendor Contracts\n\nBased on the provided contracts:\n\n1. **DataStream Analytics LLC**: $210,000 annually (invoiced monthly at $17,500 per month)\n\n2. **CloudScale Hosting Inc.**: $480,000 annually (invoiced quarterly at $120,000 per quarter)",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer correctly identifies both vendor contracts and their annual fees ($210,000 for DataStream Analytics and $480,000 for CloudScale Hosting), matching the expected answer while providing additional helpful details about payment schedules."
+    },
+    {
+      "id": "q065",
+      "category": "multi-chunk",
+      "question": "How did the remote work policy change between employee handbook v1 and v2?",
+      "rank": 1,
+      "ndcg10": 1,
+      "matchedTitle": "[EVAL] Employee Handbook v2 (2024)",
+      "matchedChunkIndex": 0,
+      "top1RelevanceScore": 0.921875,
+      "isTop1Match": true,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.921875
+      ],
+      "multiChunkCovered": false,
+      "generatedAnswer": "According to the Aurora Robotics Employee Handbook v2 (effective March 2024), the remote work policy changed as follows:\n\n**Previous policy (v1):** Employees were capped at 2 days per week of remote work, and manager approval was required for remote work arrangements.\n\n**New policy (v2):** The 2-day-per-week remote cap has been removed. Employees may now work fully remotely, fully in-office, or any mix in between, as long as their team's collaboration needs and customer commitments are met. Manager approval is no longer required for remote work arrangements.\n\nIn summary, the policy became significantly more flexible, eliminating both the weekly remote work limit and the approval requirement.",
+      "verdict": "correct",
+      "verdictReasoning": "The actual answer accurately captures all key elements of the expected answer: v1 capped remote work at 2 days per week with manager approval, and v2 removed the cap entirely, allowing fully remote, fully in-office, or any mix."
+    },
+    {
+      "id": "q066",
+      "category": "unanswerable",
+      "question": "Who is Aurora Robotics' Chief Financial Officer?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.53125,
+      "isTop1Match": false,
+      "windowSize": 0,
+      "windowRelevanceScores": [],
+      "generatedAnswer": "I don't know. I couldn't find relevant information in the available context to answer this question.\n\nNo context was provided for me to search for information about Aurora Robotics' Chief Financial Officer.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The actual answer correctly states that the information could not be found, which is the appropriate response when the question is unanswerable according to the corpus."
+    },
+    {
+      "id": "q067",
+      "category": "unanswerable",
+      "question": "What is Aurora Robotics' stock ticker symbol?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.52734375,
+      "isTop1Match": false,
+      "windowSize": 0,
+      "windowRelevanceScores": [],
+      "generatedAnswer": "I don't know. I couldn't find relevant information in the available context to answer this question.\n\nNo context was provided with your query, so I'm unable to tell you Aurora Robotics' stock ticker symbol.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The system correctly declined to provide an answer, appropriately acknowledging that the information was not available in the corpus, which matches the expected unanswerable classification."
+    },
+    {
+      "id": "q068",
+      "category": "unanswerable",
+      "question": "What was Aurora Robotics' total revenue in fiscal year 2024?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.64453125,
+      "isTop1Match": false,
+      "windowSize": 1,
+      "windowRelevanceScores": [
+        0.64453125
+      ],
+      "generatedAnswer": "I don't know. The provided context only contains information about Aurora Robotics' fiscal year 2023 results. It does not include any data about fiscal year 2024 revenue.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The actual answer correctly acknowledges that the information about Aurora Robotics' fiscal year 2024 revenue is not available in the provided documents, which matches the expected unanswerable classification."
+    },
+    {
+      "id": "q069",
+      "category": "unanswerable",
+      "question": "What is the maximum altitude the Falcon Drone v2 can fly at?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.59765625,
+      "isTop1Match": false,
+      "windowSize": 0,
+      "windowRelevanceScores": [],
+      "generatedAnswer": "I don't know. I couldn't find relevant information in the available context to answer this question.\n\nNo context was provided for me to reference, so I cannot tell you the maximum altitude of the Falcon Drone v2.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The actual answer correctly identifies that the information is not available and declines to provide a speculative answer, which is the appropriate response for an unanswerable question."
+    },
+    {
+      "id": "q070",
+      "category": "unanswerable",
+      "question": "Does Aurora Robotics offer a mobile app for monitoring the Falcon Drone fleet?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.51171875,
+      "isTop1Match": false,
+      "windowSize": 0,
+      "windowRelevanceScores": [],
+      "generatedAnswer": "I don't know. I couldn't find relevant information in the available context to answer this question.\n\nNo context was provided for me to search through, so I cannot tell you whether Aurora Robotics offers a mobile app for monitoring the Falcon Drone fleet.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The actual answer appropriately declines to answer the unanswerable question by stating it cannot find relevant information in the available context, which is the correct behavior when no document in the corpus covers the topic."
+    },
+    {
+      "id": "q071",
+      "category": "unanswerable",
+      "question": "Which cloud provider does CloudScale Hosting itself run its infrastructure on?",
+      "rank": null,
+      "ndcg10": 0,
+      "matchedTitle": null,
+      "matchedChunkIndex": null,
+      "top1RelevanceScore": 0.458984375,
+      "isTop1Match": false,
+      "windowSize": 0,
+      "windowRelevanceScores": [],
+      "generatedAnswer": "I don't know. I couldn't find relevant information in the available context to answer this question.\n\nNo context was provided for me to search through, so I'm unable to tell you which cloud provider CloudScale Hosting uses for its infrastructure.",
+      "verdict": "correctly_abstained",
+      "verdictReasoning": "The system correctly declined to answer by acknowledging it could not find the information, which is the appropriate response for an unanswerable question."
+    }
+  ]
+}

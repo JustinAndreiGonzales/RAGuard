@@ -100,6 +100,7 @@ export type ChatCitation = {
 export type Message = {
   id: string;
   role: "user" | "assistant";
+  kind?: "answer" | "system_notice";
   content: string;
   citations?: ChatCitation[];
   createdAt: string;

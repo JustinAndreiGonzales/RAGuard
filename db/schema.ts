@@ -24,6 +24,7 @@ export const statusEnum = pgEnum("status", [
 export const principalTypeEnum = pgEnum("principal_type", ["user", "team"]);
 export const visibilityEnum = pgEnum("visibility", ["private", "public"]);
 export const messageRoleEnum = pgEnum("message_role", ["user", "assistant"]);
+export const messageKindEnum = pgEnum("message_kind", ["answer", "system_notice"]);
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -149,6 +150,7 @@ export const messages = pgTable(
       .references(() => conversations.id, { onDelete: "cascade" })
       .notNull(),
     role: messageRoleEnum("role").notNull(),
+    kind: messageKindEnum("kind").default("answer").notNull(),
     content: text("content").notNull(),
     citations: jsonb("citations").$type<
       { documentId: string; documentTitle: string; excerpt: string }[]

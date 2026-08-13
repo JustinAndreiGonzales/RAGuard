@@ -65,25 +65,39 @@ const ChatPage = () => {
               </div>
             ) : (
               <div key={m.id} className="flex justify-start">
-                <div className="max-w-[65%] flex flex-col gap-xs bg-surface border border-line-subtle rounded-lg p-md">
-                  <div className="type-body-lg text-primary [&_p]:m-0 [&_p+p]:mt-sm [&_table]:border-collapse [&_table]:mt-sm [&_th]:border [&_th]:border-line [&_th]:p-xs [&_td]:border [&_td]:border-line [&_td]:p-xs">
+                <div
+                  className={
+                    m.kind === "system_notice"
+                      ? "max-w-[65%] flex flex-col gap-xs bg-canvas border border-line-subtle rounded-lg p-md"
+                      : "max-w-[65%] flex flex-col gap-xs bg-surface border border-line-subtle rounded-lg p-md"
+                  }
+                >
+                  <div
+                    className={
+                      m.kind === "system_notice"
+                        ? "type-body-lg text-secondary [&_p]:m-0 [&_p+p]:mt-sm [&_table]:border-collapse [&_table]:mt-sm [&_th]:border [&_th]:border-line [&_th]:p-xs [&_td]:border [&_td]:border-line [&_td]:p-xs"
+                        : "type-body-lg text-primary [&_p]:m-0 [&_p+p]:mt-sm [&_table]:border-collapse [&_table]:mt-sm [&_th]:border [&_th]:border-line [&_th]:p-xs [&_td]:border [&_td]:border-line [&_td]:p-xs"
+                    }
+                  >
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {m.content}
                     </ReactMarkdown>
                   </div>
-                  {m.citations && m.citations.length > 0 && (
-                    <div className="flex flex-wrap gap-xs">
-                      {m.citations.map((c, i) => (
-                        <CitationChip
-                          key={`${m.id}-${c.documentId}-${i}`}
-                          documentTitle={c.documentTitle}
-                          excerpt={c.excerpt}
-                          documentHref={`/documents/${c.documentId}`}
-                          forceUpward={isLastMessage}
-                        />
-                      ))}
-                    </div>
-                  )}
+                  {m.kind !== "system_notice" &&
+                    m.citations &&
+                    m.citations.length > 0 && (
+                      <div className="flex flex-wrap gap-xs">
+                        {m.citations.map((c, i) => (
+                          <CitationChip
+                            key={`${m.id}-${c.documentId}-${i}`}
+                            documentTitle={c.documentTitle}
+                            excerpt={c.excerpt}
+                            documentHref={`/documents/${c.documentId}`}
+                            forceUpward={isLastMessage}
+                          />
+                        ))}
+                      </div>
+                    )}
                 </div>
               </div>
             );

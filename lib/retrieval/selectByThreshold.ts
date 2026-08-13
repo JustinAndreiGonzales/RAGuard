@@ -2,8 +2,14 @@
 // confirmed-correct rank-1 hits vs. 30 unanswerable-question data points) found relevance
 // scores cleanly separate the two groups with no overlap — correct hits ranged 0.660-0.969
 // (mean 0.913), wrong/irrelevant chunks topped out at 0.645 (range 0.285-0.645, mean 0.466).
-// 0.65 sits in that gap. Revisit both constants as more eval data accumulates.
-export const DEFAULT_RELEVANCE_THRESHOLD = 0.65;
+// 0.65 sat in that gap but caused a multi-chunk coverage regression: for comparison-style
+// questions needing two chunks from different documents, one needed chunk sometimes scored
+// just below it (~0.61), collapsing the retrieval window to a single chunk. Lowered to 0.60
+// to test whether that recovers multi-chunk coverage; the known risk is a single wrong/
+// irrelevant chunk that scored 0.645 (the top of that group's 0.285-0.645 range) for one of
+// the unanswerable questions, which 0.60 would now admit. Revisit both constants as more
+// eval data accumulates.
+export const DEFAULT_RELEVANCE_THRESHOLD = 0.6;
 export const DEFAULT_MAX_K = 8;
 
 /**
