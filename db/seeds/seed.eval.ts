@@ -28,6 +28,7 @@ const EVAL_DOCS: { file: string; title: string }[] = [
   { file: "vendor-contract-cloudscale.md", title: "Vendor Contract — CloudScale Hosting" },
   { file: "vendor-contract-datastream.md", title: "Vendor Contract — DataStream Analytics" },
   { file: "engineering-onboarding-guide.md", title: "Engineering Onboarding Guide" },
+  { file: "it-asset-ticket-log.md", title: "IT Asset & Support Ticket Log" },
 ];
 
 async function seed() {

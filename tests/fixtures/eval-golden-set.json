@@ -844,5 +844,221 @@
     "expectedChunks": [],
     "category": "unanswerable",
     "expectedAnswer": "(unanswerable — not covered by any document in the corpus)"
+  },
+  {
+    "id": "q072",
+    "question": "What is Aurora Robotics' quarterly invoice amount from CloudScale Hosting?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "$120,000"
+  },
+  {
+    "id": "q073",
+    "question": "What monthly uptime percentage does CloudScale Hosting guarantee?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "99.9%"
+  },
+  {
+    "id": "q074",
+    "question": "What is Aurora Robotics' monthly payment to DataStream Analytics LLC?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — DataStream Analytics", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "$17,500"
+  },
+  {
+    "id": "q075",
+    "question": "What is the quarterly wellness stipend amount introduced in the current employee handbook?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "$150"
+  },
+  {
+    "id": "q076",
+    "question": "Approximately how many Falcon Drone v2 units were bricked in the November 2023 firmware incident?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "approximately 340 drones"
+  },
+  {
+    "id": "q077",
+    "question": "How many employees did Aurora Robotics have as of December 31, 2023?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Annual Report 2023", "chunkIndex": 0 }
+    ],
+    "category": "numeric-exact",
+    "expectedAnswer": "340 employees"
+  },
+  {
+    "id": "q078",
+    "question": "What kind of point cloud data does DataStream Analytics LLC's pipeline ingest from the Falcon Drone fleet?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — DataStream Analytics", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "LIDAR point cloud data"
+  },
+  {
+    "id": "q079",
+    "question": "What type of legal entity is DataStream Analytics?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — DataStream Analytics", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "LLC"
+  },
+  {
+    "id": "q080",
+    "question": "How many PTO days do full-time employees accrue per year under the original handbook?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Employee Handbook v1 (2022)", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "15 days"
+  },
+  {
+    "id": "q081",
+    "question": "How many PTO days do full-time employees accrue per year under the current handbook?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "20 days"
+  },
+  {
+    "id": "q082",
+    "question": "What was missing in the OTA update pipeline that caused the November 2023 firmware incident?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "a missing compatibility check"
+  },
+  {
+    "id": "q083",
+    "question": "Who is Aurora Robotics' CEO as of the 2023 annual report?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Annual Report 2023", "chunkIndex": 0 }
+    ],
+    "category": "acronym",
+    "expectedAnswer": "Raj Patel"
+  },
+  {
+    "id": "q084",
+    "question": "What is the ticket number for the OTA firmware update failure reported in February 2024?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "INC-2024-0091"
+  },
+  {
+    "id": "q085",
+    "question": "How long did it take to resolve ticket INC-2024-0091?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "4 hours 12 minutes"
+  },
+  {
+    "id": "q086",
+    "question": "What purchase order number was used to ship replacement Falcon Drone v2 units for the LIDAR RMA?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "PO-88123"
+  },
+  {
+    "id": "q087",
+    "question": "What is the RMA number for the Denver distributor's Falcon Drone v2 return?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "RMA-2024-0771"
+  },
+  {
+    "id": "q088",
+    "question": "What supplier lot number was traced to the defective LIDAR sensor batch?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "ASSET-FL2-0447"
+  },
+  {
+    "id": "q089",
+    "question": "Under what reference number is Aurora Robotics' SOC 2 Type II audit report filed?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] IT Asset & Support Ticket Log", "chunkIndex": 0 }
+    ],
+    "category": "code-id",
+    "expectedAnswer": "AUD-SOC2-2024-03"
+  },
+  {
+    "id": "q090",
+    "question": "Which vendor agreement includes the clause about terminating immediately for cause due to a \"material breach of the service level agreement that is not cured within 30 days\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "the CloudScale Hosting agreement"
+  },
+  {
+    "id": "q091",
+    "question": "Which agreement specifies service credits \"scaling with the severity of the shortfall\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Vendor Contract — CloudScale Hosting", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "the CloudScale Hosting agreement"
+  },
+  {
+    "id": "q092",
+    "question": "Which document tells employees to \"dress for your day\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Employee Handbook v2 (2024)", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "Employee Handbook v2 (2024)"
+  },
+  {
+    "id": "q093",
+    "question": "Which incident report describes drones that were \"fully bricked\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Incident Postmortem — November 2023 Firmware Incident", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "Incident Postmortem — November 2023 Firmware Incident"
+  },
+  {
+    "id": "q094",
+    "question": "Which annual report describes 2022 as \"a year of real momentum\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Annual Report 2022", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "Annual Report 2022"
+  },
+  {
+    "id": "q095",
+    "question": "Which document mentions provisioning accounts for \"email, Slack, Jira, Confluence, and GitHub\"?",
+    "expectedChunks": [
+      { "documentTitle": "[EVAL] Engineering Onboarding Guide", "chunkIndex": 0 }
+    ],
+    "category": "quoted-phrase",
+    "expectedAnswer": "Engineering Onboarding Guide"
   }
 ]

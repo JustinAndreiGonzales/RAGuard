@@ -1,4 +1,5 @@
 import {
+  customType,
   index,
   integer,
   jsonb,
@@ -12,6 +13,12 @@ import {
   varchar,
   vector,
 } from "drizzle-orm/pg-core";
+
+const tsvector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});
 
 export const roleEnum = pgEnum("role", ["admin", "user"]);
 export const fileTypeEnum = pgEnum("file_type", ["pdf", "txt", "docx", "md"]);
@@ -98,6 +105,7 @@ export const documentChunks = pgTable(
     content: text("content").notNull(),
     tokenCount: integer("token_count"),
     embedding: vector("embedding", { dimensions: 1024 }).notNull(),
+    contentTsv: tsvector("content_tsv"), // no .notNull() — DB-generated, never written by app code
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [
@@ -106,6 +114,7 @@ export const documentChunks = pgTable(
       "hnsw",
       table.embedding.op("vector_cosine_ops"),
     ),
+    index("document_chunks_content_tsv_idx").using("gin", table.contentTsv),
   ],
 );
 
